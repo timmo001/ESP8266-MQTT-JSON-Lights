@@ -19,8 +19,8 @@ See https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/REA
 light:
   platform: mqtt_json
   name: 'WS2812 Lights'
-  state_topic: 'led/led'
-  command_topic: 'led/led/set'
+  state_topic: 'light/led'
+  command_topic: 'light/led/set'
   effect: true
   effect_list:
     - solid
