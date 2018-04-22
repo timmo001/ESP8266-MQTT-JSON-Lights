@@ -73,7 +73,7 @@ int speed = 50; // 1-150
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT_MAXIMUM, DATA_PIN_LEDS, NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_GRB + NEO_KHZ800);
 
 #include "NeoPixel_Effects.h"
 
@@ -197,23 +197,19 @@ void setOff() {
   previousBlue = 0;
   previousWhite = 0;
 
-  if (!digitalRead(DATA_PIN_RELAY)) {
-    setAll(0, 0, 0, 0);
-    delay(200); // Wait for sequence to complete and stable
-    digitalWrite(DATA_PIN_RELAY, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
-    Serial.println("LED: OFF");
-  }
+  setAll(0, 0, 0, 0);
+  delay(200); // Wait for sequence to complete and stable
+  // digitalWrite(DATA_PIN_RELAY, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
+  Serial.println("LED: OFF");
 
   // NOTE: Should really set the xxx pin to be an input to ensure that data is not sent and to stop potential current flow.
   //Writing to pin in INPUT/High-impedance mode enables/disables the internal pullup resistors. But the high impedance ensures that any current flow through the pin will be negligible.
 }
 
 void setOn() {
-  if (digitalRead(DATA_PIN_RELAY)) {
-    digitalWrite(DATA_PIN_RELAY, LOW);
-    delay(1000); // Wait for Leds to init and capasitor to charge??
-    Serial.println("LED: ON");
-  }
+  // digitalWrite(DATA_PIN_RELAY, LOW);
+  delay(1000); // Wait for Leds to init and capasitor to charge??
+  Serial.println("LED: ON");
 
   stateOn = true;
 }
@@ -295,8 +291,8 @@ void reconnect() {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);       // Initialize the LED_BUILTIN pin as an output (So it doesnt float as a LED is on this pin)
   digitalWrite(LED_BUILTIN, LOW);     // Turn the status LED on
-  pinMode(DATA_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
-  digitalWrite(DATA_PIN_RELAY, LOW);  // Turn the LED strip on
+  // pinMode(DATA_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
+  // digitalWrite(DATA_PIN_RELAY, LOW);  // Turn the LED strip on
 
   Serial.begin(115200);
 
@@ -309,7 +305,7 @@ void setup() {
   strip.show(); // Initialize all pixels to 'off'
 
   // Standalone startup sequence - Wipe White
-  for(uint16_t i=0; i<ledCount; i++) {
+  for(uint16_t i = 0; i < LED_COUNT; i++) {
     setPixel(i, 0, 0, 0, 255, false);
     showStrip();
     delay(1); // Need delay to be like a yield so it will not restatrt

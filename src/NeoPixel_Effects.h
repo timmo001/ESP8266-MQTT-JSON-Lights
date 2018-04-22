@@ -32,8 +32,8 @@ void setPixel(int pixel, byte r, byte g, byte b, byte w, bool applyBrightness) {
 
 void setAll(byte r, byte g, byte b, byte w, bool refreshStrip = true) {
   if (!stateOn) { return; }
-
-  for(int i = 0; i < ledCount; i++ ) {
+  
+  for (int i = 0; i < LED_COUNT; i++) {
     setPixel(i, r, g, b, w, false);
   }
 
@@ -58,7 +58,7 @@ void Twinkle(int Count, int SpeedDelay, boolean OnlyOne) {
 
   for (int i=0; i<Count; i++) {
     if (shouldAbortEffect()) { return; }
-    setPixel(random(ledCount), red, green, blue, white, false);
+    setPixel(random(LED_COUNT), red, green, blue, white, false);
     showStrip();
     delay(SpeedDelay);
     if(OnlyOne) {
@@ -72,7 +72,7 @@ void Twinkle(int Count, int SpeedDelay, boolean OnlyOne) {
 // CylonBounce(4, 10, 50);
 void CylonBounce(int EyeSize, int SpeedDelay, int ReturnDelay){
 
-  for(int i = 0; i < (ledCount-EyeSize-2); i++) {
+  for(int i = 0; i < (LED_COUNT-EyeSize-2); i++) {
     if (shouldAbortEffect()) { return; }
     setAll(0,0,0,0,false);
     setPixel(i, red/10, green/10, blue/10, white/10, false);
@@ -86,7 +86,7 @@ void CylonBounce(int EyeSize, int SpeedDelay, int ReturnDelay){
 
   delay(ReturnDelay);
 
-  for(int i = (ledCount-EyeSize-2); i > 0; i--) {
+  for(int i = (LED_COUNT-EyeSize-2); i > 0; i--) {
     if (shouldAbortEffect()) { return; }
     setAll(0,0,0,0,false);
     setPixel(i, red/10, green/10, blue/10, white/10, false);
@@ -120,12 +120,12 @@ void setPixelHeatColor (int Pixel, byte temperature) {
 }
 // Fire(55,120,15);
 void Fire(int Cooling, int Sparking, int SpeedDelay) {
-  byte heat[ledCount];
+  byte heat[LED_COUNT];
   int cooldown;
 
   // Step 1.  Cool down every cell a little
-  for( int i = 0; i < ledCount; i++) {
-    cooldown = random(0, ((Cooling * 10) / ledCount) + 2);
+  for( int i = 0; i < LED_COUNT; i++) {
+    cooldown = random(0, ((Cooling * 10) / LED_COUNT) + 2);
 
     if(cooldown>heat[i]) {
       heat[i]=0;
@@ -135,7 +135,7 @@ void Fire(int Cooling, int Sparking, int SpeedDelay) {
   }
 
   // Step 2.  Heat from each cell drifts 'up' and diffuses a little
-  for( int k = ledCount - 1; k >= 2; k--) {
+  for( int k = LED_COUNT - 1; k >= 2; k--) {
     heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
   }
 
@@ -147,7 +147,7 @@ void Fire(int Cooling, int Sparking, int SpeedDelay) {
   }
 
   // Step 4.  Convert heat to LED colors
-  for( int j = 0; j < ledCount; j++) {
+  for( int j = 0; j < LED_COUNT; j++) {
     setPixelHeatColor(j, heat[j] );
   }
 
@@ -200,14 +200,14 @@ void Strobe(int StrobeCount, int FlashDelay){
 void theaterChase(int SpeedDelay) {
   for (int q=0; q < 3; q++) {
     if (shouldAbortEffect()) { return; }
-    for (int i=0; i < ledCount; i=i+3) {
+    for (int i=0; i < LED_COUNT; i=i+3) {
       setPixel(i+q, red, green, blue, white, false);    //turn every third pixel on
     }
     showStrip();
 
     delay(SpeedDelay);
 
-    for (int i=0; i < ledCount; i=i+3) {
+    for (int i=0; i < LED_COUNT; i=i+3) {
       setPixel(i+q, 0,0,0,0,false);        //turn every third pixel off
     }
   }
@@ -241,8 +241,8 @@ void rainbowCycle(int SpeedDelay) {
 
   for(j=0; j<256*2; j++) { // 2 cycles of all colors on wheel
     if (shouldAbortEffect()) { return; }
-    for(i=0; i< ledCount; i++) {
-      c=Wheel(((i * 256 / ledCount) + j) & 255);
+    for(i=0; i< LED_COUNT; i++) {
+      c=Wheel(((i * 256 / LED_COUNT) + j) & 255);
       setPixel(i, *c, *(c+1), *(c+2), 0, true);
     }
     showStrip();
@@ -252,7 +252,7 @@ void rainbowCycle(int SpeedDelay) {
 
 //  colorWipe(50);
 void colorWipe(int SpeedDelay) {
-  for(uint16_t i=0; i<ledCount; i++) {
+  for(uint16_t i=0; i<LED_COUNT; i++) {
     if (shouldAbortEffect()) { return; }
     setPixel(i, red, green, blue, white, false);
     showStrip();
@@ -278,11 +278,11 @@ void colorWipeOnce(int SpeedDelay) {
 void RunningLights(int WaveDelay) {
   int Position=0;
 
-  for(int i=0; i<ledCount; i++)
+  for(int i=0; i<LED_COUNT; i++)
   {
     if (shouldAbortEffect()) { return; }
     Position++; // = 0; //Position + Rate;
-    for(int i=0; i<ledCount; i++) {
+    for(int i=0; i<LED_COUNT; i++) {
       // sine wave, 3 offset waves make a rainbow!
       //float level = sin(i+Position) * 127 + 128;
       //setPixel(i,level,0,0,false);
@@ -303,7 +303,7 @@ void RunningLights(int WaveDelay) {
 void SnowSparkle(int SparkleDelay, int SpeedDelay) {
   setAll(red, green, blue, white);
 
-  int Pixel = random(ledCount);
+  int Pixel = random(LED_COUNT);
   setPixel(Pixel,0,0,0,255,false);
   showStrip();
   delay(SparkleDelay);
@@ -315,7 +315,7 @@ void SnowSparkle(int SparkleDelay, int SpeedDelay) {
 //  Sparkle(0);
 void Sparkle(int SpeedDelay) {
   setAll(0,0,0,0);
-  int Pixel = random(ledCount);
+  int Pixel = random(LED_COUNT);
   setPixel(Pixel, red, green, blue, white, false);
   showStrip();
   delay(SpeedDelay);
@@ -328,7 +328,7 @@ void TwinkleRandom(int Count, int SpeedDelay, boolean OnlyOne) {
 
   for (int i=0; i<Count; i++) {
     if (shouldAbortEffect()) { return; }
-    setPixel(random(ledCount), random(0,255), random(0,255), random(0,255), 0, true);
+    setPixel(random(LED_COUNT), random(0,255), random(0,255), random(0,255), 0, true);
     showStrip();
     delay(SpeedDelay);
     if(OnlyOne) {
@@ -377,7 +377,7 @@ void BouncingBalls(int BallCount) {
           ImpactVelocity[i] = ImpactVelocityStart;
         }
       }
-      Position[i] = round( Height[i] * (ledCount - 1) / StartHeight);
+      Position[i] = round( Height[i] * (LED_COUNT - 1) / StartHeight);
     }
 
     for (int i = 0 ; i < BallCount ; i++) {
@@ -482,8 +482,8 @@ void Fade(int SpeedDelay){
 
 void Lightning(int SpeedDelay){
   setAll(0,0,0,0);
-  int ledstart = random(ledCount);           // Determine starting location of flash
-  int ledlen = random(ledCount - ledstart);  // Determine length of flash (not to go beyond ledCount-1)
+  int ledstart = random(LED_COUNT);           // Determine starting location of flash
+  int ledlen = random(LED_COUNT - ledstart);  // Determine length of flash (not to go beyond LED_COUNT-1)
   for (int flashCounter = 0; flashCounter < random(1, 4); flashCounter++) {
     int dimmer = random(10, brightness);          // return strokes are brighter than the leader
     int rr = map(red, 0, 255, 0, dimmer);
@@ -523,7 +523,7 @@ void Lightning(int SpeedDelay){
 //
 ///********************************** START FADE************************************************/
 //void fadeall() {
-//  for (int i = 0; i < ledCount; i++) {
+//  for (int i = 0; i < LED_COUNT; i++) {
 //    leds[i].nscale8(250);  //for CYCLon
 //  }
 //}
@@ -534,15 +534,15 @@ void Lightning(int SpeedDelay){
 //void Fire2012WithPalette()
 //{
 //  // Array of temperature readings at each simulation cell
-//  static byte heat[ledCount];
+//  static byte heat[LED_COUNT];
 //
 //  // Step 1.  Cool down every cell a little
-//  for ( int i = 0; i < ledCount; i++) {
-//    heat[i] = qsub8( heat[i],  random8(0, ((COOLING * 10) / ledCount) + 2));
+//  for ( int i = 0; i < LED_COUNT; i++) {
+//    heat[i] = qsub8( heat[i],  random8(0, ((COOLING * 10) / LED_COUNT) + 2));
 //  }
 //
 //  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
-//  for ( int k = ledCount - 1; k >= 2; k--) {
+//  for ( int k = LED_COUNT - 1; k >= 2; k--) {
 //    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2] ) / 3;
 //  }
 //
@@ -553,14 +553,14 @@ void Lightning(int SpeedDelay){
 //  }
 //
 //  // Step 4.  Map from heat cells to LED colors
-//  for ( int j = 0; j < ledCount; j++) {
+//  for ( int j = 0; j < LED_COUNT; j++) {
 //    // Scale the heat value from 0-255 down to 0-240
 //    // for best results with color palettes.
 //    byte colorindex = scale8( heat[j], 240);
 //    CRGB color = ColorFromPalette( gPal, colorindex);
 //    int pixelnumber;
 //    if ( gReverseDirection ) {
-//      pixelnumber = (ledCount - 1) - j;
+//      pixelnumber = (LED_COUNT - 1) - j;
 //    } else {
 //      pixelnumber = j;
 //    }
@@ -574,7 +574,7 @@ void Lightning(int SpeedDelay){
 //void addGlitter( fract8 chanceOfGlitter)
 //{
 //  if ( random8() < chanceOfGlitter) {
-//    leds[ random16(ledCount) ] += CRGB::White;
+//    leds[ random16(LED_COUNT) ] += CRGB::White;
 //  }
 //}
 //
@@ -584,7 +584,7 @@ void Lightning(int SpeedDelay){
 //void addGlitterColor( fract8 chanceOfGlitter, int red, int green, int blue)
 //{
 //  if ( random8() < chanceOfGlitter) {
-//    leds[ random16(ledCount) ] += CRGB(red, green, blue);
+//    leds[ random16(LED_COUNT) ] += CRGB(red, green, blue);
 //  }
 //}
 //
@@ -639,14 +639,14 @@ void Lightning(int SpeedDelay){
 //int lightningcounter = 0;
 //
 ////FUNKBOX
-//int idex = 0;                //-LED INDEX (0 to ledCount-1
-//int TOP_INDEX = int(ledCount / 2);
+//int idex = 0;                //-LED INDEX (0 to LED_COUNT-1
+//int TOP_INDEX = int(LED_COUNT / 2);
 //int thissat = 255;           //-FX LOOPS DELAY VAR
 //uint8_t thishuepolice = 0;
 //int antipodal_index(int i) {
 //  int iN = i + TOP_INDEX;
 //  if (i >= TOP_INDEX) {
-//    iN = ( i + TOP_INDEX ) % ledCount;
+//    iN = ( i + TOP_INDEX ) % LED_COUNT;
 //  }
 //  return iN;
 //}
@@ -664,7 +664,7 @@ void Lightning(int SpeedDelay){
 //    uint8_t BeatsPerMinute = 62;
 //    CRGBPalette16 palette = PartyColors_p;
 //    uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
-//    for ( int i = 0; i < ledCount; i++) { //9948
+//    for ( int i = 0; i < LED_COUNT; i++) { //9948
 //      leds[i] = ColorFromPalette(palette, gHue + (i * 2), beat - gHue + (i * 10));
 //    }
 //    if (transitionTime == 0 or transitionTime == NULL) {
@@ -678,7 +678,7 @@ void Lightning(int SpeedDelay){
 //  if (effect == "candy cane") {
 //    static uint8_t startIndex = 0;
 //    startIndex = startIndex + 1; /* higher = faster motion */
-//    fill_palette( ledsRGB, ledCount,
+//    fill_palette( ledsRGB, LED_COUNT,
 //                  startIndex, 16, /* higher = narrower stripes */
 //                  currentPalettestriped, 255, LINEARBLEND);
 //    if (transitionTime == 0 or transitionTime == NULL) {
@@ -690,8 +690,8 @@ void Lightning(int SpeedDelay){
 //
 ////  //EFFECT CONFETTI
 ////  if (effect == "confetti" ) {
-////    fadeToBlackBy( ledsRGB, ledCount, 25);
-////    int pos = random16(ledCount);
+////    fadeToBlackBy( ledsRGB, LED_COUNT, 25);
+////    int pos = random16(LED_COUNT);
 ////    leds[pos] += CRGBW(red + random8(64), green, blue, 0);
 ////    if (transitionTime == 0 or transitionTime == NULL) {
 ////      transitionTime = 30;
@@ -704,7 +704,7 @@ void Lightning(int SpeedDelay){
 //  if (effect == "cyclon rainbow") {                    //Single Dot Down
 //    static uint8_t hue = 0;
 //    // First slide the led in one direction
-//    for (int i = 0; i < ledCount; i++) {
+//    for (int i = 0; i < LED_COUNT; i++) {
 //      // Set the i'th led to red
 //      leds[i] = CHSV(hue++, 255, 255);
 //      // Show the leds
@@ -715,7 +715,7 @@ void Lightning(int SpeedDelay){
 //      // Wait a little bit before we loop around and do it again
 //      delay(10);
 //    }
-//    for (int i = (ledCount) - 1; i >= 0; i--) {
+//    for (int i = (LED_COUNT) - 1; i >= 0; i--) {
 //      // Set the i'th led to red
 //      leds[i] = CHSV(hue++, 255, 255);
 //      // Show the leds
@@ -731,13 +731,13 @@ void Lightning(int SpeedDelay){
 //
 //  //EFFECT DOTS
 //  if (effect == "dots") {
-//    uint8_t inner = beatsin8(bpm, ledCount / 4, ledCount / 4 * 3);
-//    uint8_t outer = beatsin8(bpm, 0, ledCount - 1);
-//    uint8_t middle = beatsin8(bpm, ledCount / 3, ledCount / 3 * 2);
+//    uint8_t inner = beatsin8(bpm, LED_COUNT / 4, LED_COUNT / 4 * 3);
+//    uint8_t outer = beatsin8(bpm, 0, LED_COUNT - 1);
+//    uint8_t middle = beatsin8(bpm, LED_COUNT / 3, LED_COUNT / 3 * 2);
 //    leds[middle] = CRGB::Purple;
 //    leds[inner] = CRGB::Blue;
 //    leds[outer] = CRGB::Aqua;
-//    nscale8(ledsRGB, ledCount, fadeval);
+//    nscale8(ledsRGB, LED_COUNT, fadeval);
 //
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 30;
@@ -760,7 +760,7 @@ void Lightning(int SpeedDelay){
 //
 //  //EFFECT Glitter
 //  if (effect == "glitter") {
-//    fadeToBlackBy( ledsRGB, ledCount, 20);
+//    fadeToBlackBy( ledsRGB, LED_COUNT, 20);
 //    addGlitterColor(80, red, green, blue);
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 30;
@@ -771,9 +771,9 @@ void Lightning(int SpeedDelay){
 //
 //  //EFFECT JUGGLE
 //  if (effect == "juggle" ) {                           // eight colored dots, weaving in and out of sync with each other
-//    fadeToBlackBy(ledsRGB, ledCount, 20);
+//    fadeToBlackBy(ledsRGB, LED_COUNT, 20);
 //    for (int i = 0; i < 8; i++) {
-//      ledsRGB[beatsin16(i + 7, 0, ledCount - 1  )] |= CRGB(red, green, blue);
+//      ledsRGB[beatsin16(i + 7, 0, LED_COUNT - 1  )] |= CRGB(red, green, blue);
 //    }
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 130;
@@ -789,8 +789,8 @@ void Lightning(int SpeedDelay){
 //      FastLED.clear();
 //      FastLED.show();
 //    }
-//    ledstart = random8(ledCount);           // Determine starting location of flash
-//    ledlen = random8(ledCount - ledstart);  // Determine length of flash (not to go beyond ledCount-1)
+//    ledstart = random8(LED_COUNT);           // Determine starting location of flash
+//    ledlen = random8(LED_COUNT - ledstart);  // Determine length of flash (not to go beyond LED_COUNT-1)
 //    for (int flashCounter = 0; flashCounter < random8(3, flashes); flashCounter++) {
 //      if (flashCounter == 0) dimmer = 5;    // the brightness of the leader is scaled down by a factor of 5
 //      else dimmer = random8(1, 3);          // return strokes are brighter than the leader
@@ -813,7 +813,7 @@ void Lightning(int SpeedDelay){
 //  //EFFECT POLICE ALL
 //  if (effect == "police all") {                 //POLICE LIGHTS (TWO COLOR SOLID)
 //    idex++;
-//    if (idex >= ledCount) {
+//    if (idex >= LED_COUNT) {
 //      idex = 0;
 //    }
 //    int idexR = idex;
@@ -830,13 +830,13 @@ void Lightning(int SpeedDelay){
 //  //EFFECT POLICE ONE
 //  if (effect == "police one") {
 //    idex++;
-//    if (idex >= ledCount) {
+//    if (idex >= LED_COUNT) {
 //      idex = 0;
 //    }
 //    int idexR = idex;
 //    int idexB = antipodal_index(idexR);
 //    int thathue = (thishuepolice + 160) % 255;
-//    for (int i = 0; i < ledCount; i++ ) {
+//    for (int i = 0; i < LED_COUNT; i++ ) {
 //      if (i == idexR) {
 //        leds[i] = CHSV(thishuepolice, thissat, 255);
 //      }
@@ -858,7 +858,7 @@ void Lightning(int SpeedDelay){
 //  if (effect == "rainbow") {
 //    // FastLED's built-in rainbow generator
 //    static uint8_t starthue = 0;    thishue++;
-//    fill_rainbow(ledsRGB, ledCount, thishue, deltahue);
+//    fill_rainbow(ledsRGB, LED_COUNT, thishue, deltahue);
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 130;
 //    }
@@ -870,7 +870,7 @@ void Lightning(int SpeedDelay){
 //  if (effect == "rainbow with glitter") {               // FastLED's built-in rainbow generator with Glitter
 //    static uint8_t starthue = 0;
 //    thishue++;
-//    fill_rainbow(ledsRGB, ledCount, thishue, deltahue);
+//    fill_rainbow(ledsRGB, LED_COUNT, thishue, deltahue);
 //    addGlitter(80);
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 130;
@@ -881,8 +881,8 @@ void Lightning(int SpeedDelay){
 //
 //  //EFFECT SIENLON
 //  if (effect == "sinelon") {
-//    fadeToBlackBy( ledsRGB, ledCount, 20);
-//    int pos = beatsin16(13, 0, ledCount - 1);
+//    fadeToBlackBy( ledsRGB, LED_COUNT, 20);
+//    int pos = beatsin16(13, 0, LED_COUNT - 1);
 //    leds[pos] += CRGB(red, green, blue);
 //    if (transitionTime == 0 or transitionTime == NULL) {
 //      transitionTime = 150;
@@ -900,7 +900,7 @@ void Lightning(int SpeedDelay){
 //      FastLED.show();
 //    }
 //    const CRGBW lightcolor(8, 7, 1, 0);
-//    for ( int i = 0; i < ledCount; i++) {
+//    for ( int i = 0; i < LED_COUNT; i++) {
 //      if ( !leds[i]) continue; // skip black pixels
 //      if ( leds[i].r & 1) { // is red odd?
 //        leds[i] -= lightcolor; // darken if red is odd
@@ -909,7 +909,7 @@ void Lightning(int SpeedDelay){
 //      }
 //    }
 //    if ( random8() < DENSITY) {
-//      int j = random16(ledCount);
+//      int j = random16(LED_COUNT);
 //      if ( !leds[j] ) leds[j] = lightcolor;
 //    }
 //
@@ -929,7 +929,7 @@ void Lightning(int SpeedDelay){
 //
 //    //EFFECT NOISE
 //    if (effect == "noise") {
-//      for (int i = 0; i < ledCount; i++) {                                     // Just onE loop to fill up the LED array as all of the pixels change.
+//      for (int i = 0; i < LED_COUNT; i++) {                                     // Just onE loop to fill up the LED array as all of the pixels change.
 //        uint8_t index = inoise8(i * scale, dist + i * scale) % 255;            // Get a value from the noise function. I'm using both x and y axis.
 //        leds[i] = ColorFromPalette(currentPalette, index, 255, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
 //      }
@@ -943,10 +943,10 @@ void Lightning(int SpeedDelay){
 //
 //    //EFFECT RIPPLE
 //    if (effect == "ripple") {
-//      for (int i = 0; i < ledCount; i++) leds[i] = CHSV(bgcol++, 255, 15);  // Rotate background colour.
+//      for (int i = 0; i < LED_COUNT; i++) leds[i] = CHSV(bgcol++, 255, 15);  // Rotate background colour.
 //      switch (step) {
 //        case -1:                                                          // Initialize ripple variables.
-//          center = random(ledCount);
+//          center = random(LED_COUNT);
 //          colour = random8();
 //          step = 0;
 //          break;
@@ -958,8 +958,8 @@ void Lightning(int SpeedDelay){
 //          step = -1;
 //          break;
 //        default:                                                             // Middle of the ripples.
-//          leds[(center + step + ledCount) % ledCount] += CHSV(colour, 255, myfade / step * 2);   // Simple wrap from Marc Miller
-//          leds[(center - step + ledCount) % ledCount] += CHSV(colour, 255, myfade / step * 2);
+//          leds[(center + step + LED_COUNT) % LED_COUNT] += CHSV(colour, 255, myfade / step * 2);   // Simple wrap from Marc Miller
+//          leds[(center - step + LED_COUNT) % LED_COUNT] += CHSV(colour, 255, myfade / step * 2);
 //          step ++;                                                         // Next step.
 //          break;
 //      }
