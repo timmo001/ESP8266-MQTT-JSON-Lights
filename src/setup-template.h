@@ -14,9 +14,9 @@ char* MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 #define OTApassword "PASSWORD" //the password you will need to enter to upload remotely via the ArduinoIDE
 #define OTAport 8266
 
-#define LED_COUNT 14 // D5 on ESP8266
+#define PIN 14 // D5 on ESP8266
+#define LED_COUNT 12
 
-/******************************** CONFIG SETUP *******************************/
 char* deviceName = "led";
 byte maxBrightness = 255;
 
