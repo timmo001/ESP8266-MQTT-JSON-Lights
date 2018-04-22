@@ -17,24 +17,23 @@ void showStrip() {
   strip.show();
 }
 
-void setPixel(int pixel, byte r, byte g, byte b, byte w, bool applyBrightness) {
+void setPixel(int pixel, byte r, byte g, byte b, bool applyBrightness) {
   if (!stateOn) { return; }
 
   if (applyBrightness) {
     r = map(r, 0, 255, 0, brightness);
     g = map(g, 0, 255, 0, brightness);
     b = map(b, 0, 255, 0, brightness);
-    w = map(w, 0, 255, 0, brightness);
   }
 
-   strip.setPixelColor(pixel, strip.Color(r, g, b, w));
+   strip.setPixelColor(pixel, strip.Color(r, g, b));
 }
 
-void setAll(byte r, byte g, byte b, byte w, bool refreshStrip = true) {
+void setAll(byte r, byte g, byte b, bool refreshStrip = true) {
   if (!stateOn) { return; }
   
   for (int i = 0; i < LED_COUNT; i++) {
-    setPixel(i, r, g, b, w, false);
+    setPixel(i, r, g, b, false);
   }
 
   if (refreshStrip) {
@@ -58,7 +57,7 @@ void Twinkle(int Count, int SpeedDelay, boolean OnlyOne) {
 
   for (int i=0; i<Count; i++) {
     if (shouldAbortEffect()) { return; }
-    setPixel(random(LED_COUNT), red, green, blue, white, false);
+    setPixel(random(LED_COUNT), red, green, blue, false);
     showStrip();
     delay(SpeedDelay);
     if(OnlyOne) {
@@ -74,12 +73,12 @@ void CylonBounce(int EyeSize, int SpeedDelay, int ReturnDelay){
 
   for(int i = 0; i < (LED_COUNT-EyeSize-2); i++) {
     if (shouldAbortEffect()) { return; }
-    setAll(0,0,0,0,false);
-    setPixel(i, red/10, green/10, blue/10, white/10, false);
+    setAll(0, 0, 0, false);
+    setPixel(i, red/10, green/10, blue/10, false);
     for(int j = 1; j <= EyeSize; j++) {
-      setPixel(i+j, red, green, blue, white, false);
+      setPixel(i+j, red, green, blue, false);
     }
-    setPixel(i+EyeSize+1, red/10, green/10, blue/10, white/10, false);
+    setPixel(i+EyeSize+1, red/10, green/10, blue/10, false);
     showStrip();
     delay(SpeedDelay);
   }
@@ -88,12 +87,12 @@ void CylonBounce(int EyeSize, int SpeedDelay, int ReturnDelay){
 
   for(int i = (LED_COUNT-EyeSize-2); i > 0; i--) {
     if (shouldAbortEffect()) { return; }
-    setAll(0,0,0,0,false);
-    setPixel(i, red/10, green/10, blue/10, white/10, false);
+    setAll(0, 0, 0, false);
+    setPixel(i, red/10, green/10, blue/10, false);
     for(int j = 1; j <= EyeSize; j++) {
-      setPixel(i+j, red, green, blue, white, false);
+      setPixel(i+j, red, green, blue, false);
     }
-    setPixel(i+EyeSize+1, red/10, green/10, blue/10, white/10, false);
+    setPixel(i+EyeSize+1, red/10, green/10, blue/10, false);
     showStrip();
     delay(SpeedDelay);
   }
@@ -111,11 +110,11 @@ void setPixelHeatColor (int Pixel, byte temperature) {
 
   // figure out which third of the spectrum we're in:
   if( t192 > 0x80) {                     // hottest
-    setPixel(Pixel, 255, 255, heatramp, 0, true);
+    setPixel(Pixel, 255, 255, heatramp, true);
   } else if( t192 > 0x40 ) {             // middle
-    setPixel(Pixel, 255, heatramp, 0, 0, true);
+    setPixel(Pixel, 255, heatramp, 0, true);
   } else {                               // coolest
-    setPixel(Pixel, heatramp, 0, 0, 0, true);
+    setPixel(Pixel, heatramp, 0, 0, true);
   }
 }
 // Fire(55,120,15);
@@ -164,7 +163,6 @@ void FadeInOut(){
     r = (k/256.0)*red;
     g = (k/256.0)*green;
     b = (k/256.0)*blue;
-    w = (k/256.0)*white;
     setAll(r,g,b,w);
     showStrip();
   }
@@ -174,7 +172,6 @@ void FadeInOut(){
     r = (k/256.0)*red;
     g = (k/256.0)*green;
     b = (k/256.0)*blue;
-    w = (k/256.0)*white;
     setAll(r,g,b,w);
     showStrip();
   }
@@ -187,7 +184,7 @@ void FadeInOut(){
 void Strobe(int StrobeCount, int FlashDelay){
   for(int j = 0; j < StrobeCount; j++) {
     if (shouldAbortEffect()) { return; }
-    setAll(red, green, blue, white);
+    setAll(red, green, blue);
     showStrip();
     delay(FlashDelay);
     setAll(0,0,0,0);
@@ -201,14 +198,14 @@ void theaterChase(int SpeedDelay) {
   for (int q=0; q < 3; q++) {
     if (shouldAbortEffect()) { return; }
     for (int i=0; i < LED_COUNT; i=i+3) {
-      setPixel(i+q, red, green, blue, white, false);    //turn every third pixel on
+      setPixel(i+q, red, green, blue, false);    //turn every third pixel on
     }
     showStrip();
 
     delay(SpeedDelay);
 
     for (int i=0; i < LED_COUNT; i=i+3) {
-      setPixel(i+q, 0,0,0,0,false);        //turn every third pixel off
+      setPixel(i + q, 0, 0, 0, false);        //turn every third pixel off
     }
   }
 }
@@ -243,7 +240,7 @@ void rainbowCycle(int SpeedDelay) {
     if (shouldAbortEffect()) { return; }
     for(i=0; i< LED_COUNT; i++) {
       c=Wheel(((i * 256 / LED_COUNT) + j) & 255);
-      setPixel(i, *c, *(c+1), *(c+2), 0, true);
+      setPixel(i, *c, *(c+1), *(c+2), true);
     }
     showStrip();
     delay(SpeedDelay);
@@ -254,7 +251,7 @@ void rainbowCycle(int SpeedDelay) {
 void colorWipe(int SpeedDelay) {
   for(uint16_t i=0; i<LED_COUNT; i++) {
     if (shouldAbortEffect()) { return; }
-    setPixel(i, red, green, blue, white, false);
+    setPixel(i, red, green, blue, false);
     showStrip();
     delay(SpeedDelay);
   }
@@ -269,7 +266,6 @@ void colorWipeOnce(int SpeedDelay) {
   red = previousRed;
   green = previousGreen;
   blue = previousBlue;
-  white = previousWhite;
 
   colorWipe(SpeedDelay);
 }
@@ -290,7 +286,6 @@ void RunningLights(int WaveDelay) {
       setPixel(i,((sin(i+Position) * 127 + 128)/255)*red,
                    ((sin(i+Position) * 127 + 128)/255)*green,
                    ((sin(i+Position) * 127 + 128)/255)*blue,
-                   ((sin(i+Position) * 127 + 128)/255)*white,
 				   false);
     }
 
@@ -301,13 +296,13 @@ void RunningLights(int WaveDelay) {
 
 //  SnowSparkle(20, random(100,1000));
 void SnowSparkle(int SparkleDelay, int SpeedDelay) {
-  setAll(red, green, blue, white);
+  setAll(red, green, blue);
 
   int Pixel = random(LED_COUNT);
-  setPixel(Pixel,0,0,0,255,false);
+  setPixel(Pixel, 255, 255, 255,false);
   showStrip();
   delay(SparkleDelay);
-  setPixel(Pixel, red, green, blue, white, false);
+  setPixel(Pixel, red, green, blue, false);
   showStrip();
   delay(SpeedDelay);
 }
@@ -316,10 +311,10 @@ void SnowSparkle(int SparkleDelay, int SpeedDelay) {
 void Sparkle(int SpeedDelay) {
   setAll(0,0,0,0);
   int Pixel = random(LED_COUNT);
-  setPixel(Pixel, red, green, blue, white, false);
+  setPixel(Pixel, red, green, blue, false);
   showStrip();
   delay(SpeedDelay);
-  setPixel(Pixel,0,0,0,0,false);
+  setPixel(Pixel, 0, 0, 0, false);
 }
 
 //  TwinkleRandom(20, 100, false);
@@ -328,11 +323,11 @@ void TwinkleRandom(int Count, int SpeedDelay, boolean OnlyOne) {
 
   for (int i=0; i<Count; i++) {
     if (shouldAbortEffect()) { return; }
-    setPixel(random(LED_COUNT), random(0,255), random(0,255), random(0,255), 0, true);
+    setPixel(random(LED_COUNT), random(0,255), random(0,255), random(0,255), true);
     showStrip();
     delay(SpeedDelay);
     if(OnlyOne) {
-      setAll(0,0,0,0);
+      setAll(0, 0, 0);
     }
   }
 
@@ -381,7 +376,7 @@ void BouncingBalls(int BallCount) {
     }
 
     for (int i = 0 ; i < BallCount ; i++) {
-      setPixel(Position[i],red,green,blue,white,false);
+      setPixel(Position[i], red, green, blue, false);
     }
 
     showStrip();
@@ -453,14 +448,12 @@ void Fade(int SpeedDelay){
   int redVal = previousRed;
   int grnVal = previousGreen;
   int bluVal = previousBlue;
-  int whiVal = previousWhite;
   int stepR = calculateStep(redVal, red);
   int stepG = calculateStep(grnVal, green);
   int stepB = calculateStep(bluVal, blue);
-  int stepW = calculateStep(whiVal, white);
 
   // If no change then exit
-  if (stepR == 0 && stepG == 0 && stepB == 0 && stepW == 0){ return; }
+  if (stepR == 0 && stepG == 0 && stepB == 0){ return; }
 
   for (int i=0; i<1020; i++) {
     if (shouldAbortEffect()) { return; }
@@ -468,15 +461,14 @@ void Fade(int SpeedDelay){
     redVal = calculateVal(stepR, redVal, i);
     grnVal = calculateVal(stepG, grnVal, i);
     bluVal = calculateVal(stepB, bluVal, i);
-    whiVal = calculateVal(stepW, whiVal, i);
 
     if (i % 50 == 0) {
-      setAll(redVal, grnVal, bluVal, whiVal); // Write current values to LED pins
+      setAll(redVal, grnVal, bluVal); // Write current values to LED pins
       delay(SpeedDelay);
     }
   }
 
-  setAll(redVal, grnVal, bluVal, whiVal); // Write current values to LED pins
+  setAll(redVal, grnVal, bluVal); // Write current values to LED pins
   transitionDone = true;
 }
 
@@ -489,15 +481,14 @@ void Lightning(int SpeedDelay){
     int rr = map(red, 0, 255, 0, dimmer);
     int gg = map(green, 0, 255, 0, dimmer);
     int bb = map(blue, 0, 255, 0, dimmer);
-    int ww = map(white, 0, 255, 0, dimmer);
 
     for (int i = ledstart ; i < (ledstart + ledlen) ; i++) {
-      setPixel(i, rr, gg, bb, ww, false);
+      setPixel(i, rr, gg, bb, false);
     }
     showStrip();    // Show a section of LED's
     delay(random(4, 15));                // each flash only lasts 4-10 milliseconds
     for (int i = ledstart ; i < (ledstart + ledlen) ; i++) {
-      setPixel(i, 0, 0, 0, 0, false);
+      setPixel(i, 0, 0, 0, false);
     }
     showStrip();
     //if (flashCounter == 0) delay (130);   // longer delay until next flash after the leader

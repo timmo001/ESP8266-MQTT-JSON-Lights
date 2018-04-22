@@ -39,23 +39,20 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
 /*********************************** LED Defintions ********************************/
 // Real values as requested from the MQTT server
-byte realRed = 0;
-byte realGreen = 0;
-byte realBlue = 0;
-byte realWhite = 255;
+byte realRed = 255;
+byte realGreen = 255;
+byte realBlue = 255;
 
 // Previous requested values
-byte previousRed = 0;
-byte previousGreen = 0;
-byte previousBlue = 0;
-byte previousWhite = 0;
+byte previousRed = 255;
+byte previousGreen = 255;
+byte previousBlue = 255;
 
 // Values as set to strip
-byte red = 0;
-byte green = 0;
-byte blue = 0;
-byte white = 0;
-byte brightness = 255;
+byte red = 255;
+byte green = 255;
+byte blue = 255;
+byte brightness = 204; // 80%
 
 
 /******************************** OTHER GLOBALS *******************************/
@@ -112,7 +109,6 @@ void sendState() {
   color["g"] = realGreen;
   color["b"] = realBlue;
 
-  root["white_value"] = realWhite;
   root["brightness"] = brightness;
   root["transition"] = transitionTime;
   root["speed"] = speed;
@@ -154,22 +150,13 @@ bool processJson(char* message) {
   }
 
   if (root.containsKey("speed")) {
-    transitionTime = root["speed"];
+    speed = root["speed"];
   }
 
   if (root.containsKey("color")) {
     realRed = root["color"]["r"];
     realGreen = root["color"]["g"];
     realBlue = root["color"]["b"];
-    realWhite = 0;
-  }
-
-  // To prevent our power supply from having a cow. Only RGB OR White
-  if (root.containsKey("white_value")) {
-    realRed = 0;
-    realGreen = 0;
-    realBlue = 0;
-    realWhite = root["white_value"];
   }
 
   if (root.containsKey("brightness")) {
@@ -195,7 +182,6 @@ void setOff() {
   previousRed = 0;
   previousGreen = 0;
   previousBlue = 0;
-  previousWhite = 0;
 
   setAll(0, 0, 0, 0);
   delay(200); // Wait for sequence to complete and stable
@@ -236,18 +222,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
   previousRed = red;
   previousGreen = green;
   previousBlue = blue;
-  previousWhite = white;
 
   if (stateOn) {
     red = map(realRed, 0, 255, 0, brightness);
     green = map(realGreen, 0, 255, 0, brightness);
     blue = map(realBlue, 0, 255, 0, brightness);
-    white = map(realWhite, 0, 255, 0, brightness);
   } else {
     red = 0;
     green = 0;
     blue = 0;
-    white = 0;
   }
 
   Serial.println(effect);
@@ -306,7 +289,7 @@ void setup() {
 
   // Standalone startup sequence - Wipe White
   for(uint16_t i = 0; i < LED_COUNT; i++) {
-    setPixel(i, 0, 0, 0, 255, false);
+    setPixel(i, 255, 255, 255, false);
     showStrip();
     delay(1); // Need delay to be like a yield so it will not restatrt
   }
@@ -314,7 +297,7 @@ void setup() {
   setup_wifi();
 
   // OK we are on Wifi so we are no standalone.
-  setPixel(0, 255, 0, 0, 255, false); // Red tinge on first Pixel
+  setPixel(0, 255, 0, 0, false); // Red tinge on first Pixel
   showStrip();
 
   client.setServer(MQTT_SERVER, MQTT_PORT);
@@ -347,7 +330,7 @@ void setup() {
   Serial.println(F("Ready"));
 
   // OK we are connected
-  setPixel(0, 0, 255, 0, 255, false); // Green tinge on first Pixel
+  // setPixel(0, 0, 0, 0, false); // Off / Black ready to turn on
   showStrip();
   delay(500); // Wait so we can see the green before clearing
   digitalWrite(LED_BUILTIN, HIGH); // Turn the status LED off
@@ -377,14 +360,14 @@ void loop() {
       //EFFECTS
       if (effect == "solid") {
         if (speed <= 1) {
-          setAll(red, green, blue, white);
+          setAll(red, green, blue);
           transitionDone = true;
         } else {
           Fade(speed);
         }
       }
       if (effect == "pixel") {
-        setPixel(pixel, red, green, blue, white, false);
+        setPixel(pixel, red, green, blue, false);
         showStrip();
         transitionDone = true;
       }
@@ -440,7 +423,7 @@ void loop() {
           effect = previousEffect;
         }
 
-        if (red == 0 && green == 0 && blue == 0 && white == 0) {
+        if (red == 0 && green == 0 && blue == 0) {
           setOff();
         } else {
           transitionDone = false; // Run the old effect again
