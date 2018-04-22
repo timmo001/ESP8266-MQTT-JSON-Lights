@@ -168,10 +168,9 @@ void setOff() {
 
   // Set all leds to 0
   for (int i = 0; i < LED_COUNT; i++) {
-    setPixel(i, 0, 0, 0, false);
+    strip.setPixelColor(i, strip.Color(0, 0, 0));
   }
   
-
   delay(200); // Wait for sequence to complete and stable
   digitalWrite(PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
   Serial.println("LED: OFF");
@@ -368,13 +367,13 @@ void loop() {
         }
       }
       if (effect == "twinkle") {
-        twinkle(10, (2*speed), false);
+        twinkle(10, (2 * speed), false);
       }
       if (effect == "cylon bounce") {
-        cylonBounce(4, speed/10, 50);
+        cylonBounce(4, speed / 10, 50);
       }
       if (effect == "fire") {
-        fire(55,120,(2*speed/2));
+        fire(55, 120, (2 * speed / 2));
       }
       if (effect == "fade in out") {
         fadeInOut(speed / 2);
@@ -395,7 +394,7 @@ void loop() {
         runningLights(speed);
       }
       if (effect == "snow sparkle") {
-        snowSparkle(20, random(speed,(10*speed)));
+        snowSparkle(20, random(speed, (10 * speed)));
       }
       if (effect == "sparkle") {
         sparkle(speed);
