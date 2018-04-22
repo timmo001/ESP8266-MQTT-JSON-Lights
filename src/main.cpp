@@ -164,13 +164,16 @@ void setOff() {
   stateOn = false;
   transitionDone = true; // Ensure we dont run the loop
   transitionAbort = true; // Ensure we about any current effect
-  previousRed = 0;
-  previousGreen = 0;
-  previousBlue = 0;
+  previousRed, previousGreen, previousBlue = 0;
 
-  setAll(0, 0, 0, 0);
+  // Set all leds to 0
+  for (int i = 0; i < LED_COUNT; i++) {
+    setPixel(i, 0, 0, 0, false);
+  }
+  
+
   delay(200); // Wait for sequence to complete and stable
-  // digitalWrite(DATA_PIN_RELAY, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
+  digitalWrite(PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
   Serial.println("LED: OFF");
 
   // NOTE: Should really set the xxx pin to be an input to ensure that data is not sent and to stop potential current flow.
@@ -178,7 +181,7 @@ void setOff() {
 }
 
 void setOn() {
-  // digitalWrite(DATA_PIN_RELAY, LOW);
+  digitalWrite(PIN, LOW);
   delay(1000); // Wait for Leds to init and capasitor to charge??
   Serial.println("LED: ON");
 
@@ -227,6 +230,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     blue = 0;
   }
 
+  Serial.print("effect: ");
   Serial.println(effect);
 
   transitionAbort = true; // Kill the current effect
@@ -360,23 +364,23 @@ void loop() {
           setAll(red, green, blue);
           transitionDone = true;
         } else {
-          Fade(speed);
+          fade(speed);
         }
       }
       if (effect == "twinkle") {
-        Twinkle(10, (2*speed), false);
+        twinkle(10, (2*speed), false);
       }
       if (effect == "cylon bounce") {
-        CylonBounce(4, speed/10, 50);
+        cylonBounce(4, speed/10, 50);
       }
       if (effect == "fire") {
-        Fire(55,120,(2*speed/2));
+        fire(55,120,(2*speed/2));
       }
       if (effect == "fade in out") {
-        FadeInOut(speed / 2);
+        fadeInOut(speed / 2);
       }
       if (effect == "strobe") {
-        Strobe(10, speed / 2);
+        strobe(10, speed / 2);
       }
       if (effect == "theater chase") {
         theaterChase(speed / 2);
@@ -388,22 +392,22 @@ void loop() {
         colorWipe(speed / 40);
       }
       if (effect == "running lights") {
-        RunningLights(speed);
+        runningLights(speed);
       }
       if (effect == "snow sparkle") {
-        SnowSparkle(20, random(speed,(10*speed)));
+        snowSparkle(20, random(speed,(10*speed)));
       }
       if (effect == "sparkle") {
-        Sparkle(speed);
+        sparkle(speed);
       }
       if (effect == "twinkle random") {
-        TwinkleRandom(20, (2*speed), false);
+        twinkleRandom(20, (2*speed), false);
       }
       if (effect == "bouncing balls") {
-        BouncingBalls(3);
+        bouncingBalls(3);
       }
       if (effect == "lightning") {
-        Lightning(speed);
+        lightning(speed);
       }
 
       // Run once notification effects
