@@ -231,17 +231,22 @@ byte * Wheel(byte WheelPos) {
 
   return c;
 }
+
+byte rainbow(byte *c, uint16_t i, uint16_t j) {
+  for (i = 0; i < LED_COUNT; i++) {
+    c = Wheel(((i * 256 / LED_COUNT) + j) & 255);
+    setPixel(i, *c, *(c+1), *(c+2), true);
+  }
+  return *c;
+}
+
 //  rainbowCycle(20);
 void rainbowCycle(int SpeedDelay) {
   byte *c;
   uint16_t i, j;
-
-  for(j=0; j<256*2; j++) { // 2 cycles of all colors on wheel
+  for(j = 0; j < 256 * 2; j++) { // 2 cycles of all colors on wheel
     if (shouldAbortEffect()) { return; }
-    for(i=0; i< LED_COUNT; i++) {
-      c=Wheel(((i * 256 / LED_COUNT) + j) & 255);
-      setPixel(i, *c, *(c+1), *(c+2), true);
-    }
+    rainbow(c, i, j);
     showStrip();
     delay(SpeedDelay);
   }

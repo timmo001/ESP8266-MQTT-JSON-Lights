@@ -48,9 +48,9 @@ byte previousGreen = 0;
 byte previousBlue = 0;
 
 // Values as set to strip
-byte red = 0;
-byte green = 0;
-byte blue = 0;
+byte red = 255;
+byte green = 255;
+byte blue = 255;
 byte brightness = 204; // 80%
 
 
@@ -64,7 +64,6 @@ bool stateOn = true;
 bool transitionDone = true;
 bool transitionAbort = false;
 int transition = 60; // 1-150
-int pixel = 1;
 int speed = 50; // 1-150
 
 WiFiClient espClient;
@@ -155,10 +154,6 @@ bool processJson(char* message) {
 
   if (root.containsKey("brightness")) {
     brightness = root["brightness"];
-  }
-
-  if (root.containsKey("pixel")) {
-    pixel = root["pixel"];
   }
 
   if (root.containsKey("effect")) {
@@ -277,16 +272,19 @@ void setup() {
   setup_config();
 
   // End of trinket special code
-  strip.setBrightness(maxBrightness);
+  strip.setBrightness(defaultBrightness);
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
 
   // Standalone startup sequence - Wipe White
-  for(uint16_t i = 0; i < LED_COUNT; i++) {
-    setPixel(i, 255, 255, 255, false);
-    showStrip();
-    delay(1); // Need delay to be like a yield so it will not restatrt
-  }
+  // for(uint16_t i = 0; i < LED_COUNT; i++) {
+  //   setPixel(i, 255, 255, 255, false);
+  //   showStrip();
+  //   delay(1); // Need delay to be like a yield so it will not restatrt
+  // }
+  byte *c;
+  rainbow(c, 0, 0);
+  showStrip();
 
   setup_wifi();
 
@@ -324,7 +322,7 @@ void setup() {
   Serial.println(F("Ready"));
 
   // OK we are connected
-  // setPixel(0, 0, 0, 0, false); // Off / Black ready to turn on
+  setAll(0, 0, 0, false); // Off / Black ready to turn on
   showStrip();
   delay(500); // Wait so we can see the green before clearing
   digitalWrite(LED_BUILTIN, HIGH); // Turn the status LED off
@@ -359,11 +357,6 @@ void loop() {
         } else {
           Fade(speed);
         }
-      }
-      if (effect == "pixel") {
-        setPixel(pixel, red, green, blue, false);
-        showStrip();
-        transitionDone = true;
       }
       if (effect == "twinkle") {
         Twinkle(10, (2*speed), false);
