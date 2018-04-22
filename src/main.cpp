@@ -19,7 +19,6 @@
       "b": 100
     },
     "flash": 2,
-    "transition": 5,
     "state": "ON"
   }
 */
@@ -39,19 +38,19 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
 /*********************************** LED Defintions ********************************/
 // Real values as requested from the MQTT server
-byte realRed = 255;
-byte realGreen = 255;
-byte realBlue = 255;
+byte realRed = 0;
+byte realGreen = 0;
+byte realBlue = 0;
 
 // Previous requested values
-byte previousRed = 255;
-byte previousGreen = 255;
-byte previousBlue = 255;
+byte previousRed = 0;
+byte previousGreen = 0;
+byte previousBlue = 0;
 
 // Values as set to strip
-byte red = 255;
-byte green = 255;
-byte blue = 255;
+byte red = 0;
+byte green = 0;
+byte blue = 0;
 byte brightness = 204; // 80%
 
 
@@ -64,7 +63,7 @@ String effect = "solid";
 bool stateOn = true;
 bool transitionDone = true;
 bool transitionAbort = false;
-int transitionTime = 50; // 1-150
+int transition = 60; // 1-150
 int pixel = 1;
 int speed = 50; // 1-150
 
@@ -110,7 +109,6 @@ void sendState() {
   color["b"] = realBlue;
 
   root["brightness"] = brightness;
-  root["transition"] = transitionTime;
   root["speed"] = speed;
   root["effect"] = effect.c_str();
 
@@ -143,10 +141,6 @@ bool processJson(char* message) {
       sendState();
       return false;
     }
-  }
-
-  if (root.containsKey("transition")) {
-    transitionTime = root["transition"];
   }
 
   if (root.containsKey("speed")) {

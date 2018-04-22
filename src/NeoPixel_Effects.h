@@ -658,8 +658,8 @@ void Lightning(int SpeedDelay){
 //    for ( int i = 0; i < LED_COUNT; i++) { //9948
 //      leds[i] = ColorFromPalette(palette, gHue + (i * 2), beat - gHue + (i * 10));
 //    }
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 30;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 30;
 //    }
 //    showleds();
 //  }
@@ -672,8 +672,8 @@ void Lightning(int SpeedDelay){
 //    fill_palette( ledsRGB, LED_COUNT,
 //                  startIndex, 16, /* higher = narrower stripes */
 //                  currentPalettestriped, 255, LINEARBLEND);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 0;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 0;
 //    }
 //    showleds();
 //  }
@@ -684,8 +684,8 @@ void Lightning(int SpeedDelay){
 ////    fadeToBlackBy( ledsRGB, LED_COUNT, 25);
 ////    int pos = random16(LED_COUNT);
 ////    leds[pos] += CRGBW(red + random8(64), green, blue, 0);
-////    if (transitionTime == 0 or transitionTime == NULL) {
-////      transitionTime = 30;
+////    if (transition == 0 or transition == NULL) {
+////      transition = 30;
 ////    }
 ////    showleds();
 ////  }
@@ -730,8 +730,8 @@ void Lightning(int SpeedDelay){
 //    leds[outer] = CRGB::Aqua;
 //    nscale8(ledsRGB, LED_COUNT, fadeval);
 //
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 30;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 30;
 //    }
 //    showleds();
 //  }
@@ -740,8 +740,8 @@ void Lightning(int SpeedDelay){
 //  //EFFECT FIRE
 //  if (effect == "fire") {
 //    Fire2012WithPalette();
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 150;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 150;
 //    }
 //    showleds();
 //  }
@@ -753,8 +753,8 @@ void Lightning(int SpeedDelay){
 //  if (effect == "glitter") {
 //    fadeToBlackBy( ledsRGB, LED_COUNT, 20);
 //    addGlitterColor(80, red, green, blue);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 30;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 30;
 //    }
 //    showleds();
 //  }
@@ -766,8 +766,8 @@ void Lightning(int SpeedDelay){
 //    for (int i = 0; i < 8; i++) {
 //      ledsRGB[beatsin16(i + 7, 0, LED_COUNT - 1  )] |= CRGB(red, green, blue);
 //    }
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 130;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 130;
 //    }
 //    showleds();
 //  }
@@ -794,8 +794,8 @@ void Lightning(int SpeedDelay){
 //      delay(50 + random8(100));             // shorter delay between strokes
 //    }
 //    delay(random8(frequency) * 100);        // delay between strikes
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 0;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 0;
 //    }
 //    showleds();
 //  }
@@ -812,8 +812,8 @@ void Lightning(int SpeedDelay){
 //    int thathue = (thishuepolice + 160) % 255;
 //    leds[idexR] = CHSV(thishuepolice, thissat, 255);
 //    leds[idexB] = CHSV(thathue, thissat, 255);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 30;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 30;
 //    }
 //    showleds();
 //  }
@@ -838,8 +838,8 @@ void Lightning(int SpeedDelay){
 //        leds[i] = CHSV(0, 0, 0);
 //      }
 //    }
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 30;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 30;
 //    }
 //    showleds();
 //  }
@@ -850,8 +850,8 @@ void Lightning(int SpeedDelay){
 //    // FastLED's built-in rainbow generator
 //    static uint8_t starthue = 0;    thishue++;
 //    fill_rainbow(ledsRGB, LED_COUNT, thishue, deltahue);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 130;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 130;
 //    }
 //    showleds();
 //  }
@@ -863,8 +863,8 @@ void Lightning(int SpeedDelay){
 //    thishue++;
 //    fill_rainbow(ledsRGB, LED_COUNT, thishue, deltahue);
 //    addGlitter(80);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 130;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 130;
 //    }
 //    showleds();
 //  }
@@ -875,8 +875,8 @@ void Lightning(int SpeedDelay){
 //    fadeToBlackBy( ledsRGB, LED_COUNT, 20);
 //    int pos = beatsin16(13, 0, LED_COUNT - 1);
 //    leds[pos] += CRGB(red, green, blue);
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 150;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 150;
 //    }
 //    showleds();
 //  }
@@ -904,8 +904,8 @@ void Lightning(int SpeedDelay){
 //      if ( !leds[j] ) leds[j] = lightcolor;
 //    }
 //
-//    if (transitionTime == 0 or transitionTime == NULL) {
-//      transitionTime = 0;
+//    if (transition == 0 or transition == NULL) {
+//      transition = 0;
 //    }
 //    showleds();
 //  }
@@ -926,8 +926,8 @@ void Lightning(int SpeedDelay){
 //      }
 //      dist += beatsin8(10, 1, 4);                                              // Moving along the distance (that random number we started out with). Vary it a bit with a sine wave.
 //      // In some sketches, I've used millis() instead of an incremented counter. Works a treat.
-//      if (transitionTime == 0 or transitionTime == NULL) {
-//        transitionTime = 0;
+//      if (transition == 0 or transition == NULL) {
+//        transition = 0;
 //      }
 //      showleds();
 //    }
@@ -954,8 +954,8 @@ void Lightning(int SpeedDelay){
 //          step ++;                                                         // Next step.
 //          break;
 //      }
-//      if (transitionTime == 0 or transitionTime == NULL) {
-//        transitionTime = 30;
+//      if (transition == 0 or transition == NULL) {
+//        transition = 30;
 //      }
 //      showleds();
 //    }
