@@ -430,28 +430,6 @@ void loop() {
         }
         sendState();
       }
-
-      if (effect == "bpm") {
-      }
-      if (effect == "candy cane") {
-      }
-      if (effect == "confetti" ) {
-      }
-      if (effect == "dots") {
-      }
-      if (effect == "glitter") {
-      }
-      if (effect == "juggle" ) {                           // eight colored dots, weaving in and out of sync with each other
-      }
-      if (effect == "lightning") {
-      }
-      if (effect == "police all") {                 //POLICE LIGHTS (TWO COLOR SOLID)
-      }
-      if (effect == "police one") {
-      }
-      if (effect == "rainbow with glitter") {               // FastLED's built-in rainbow generator with Glitter
-      }
-
     } else {
       setAll(0, 0, 0, 0);
       transitionDone = true;
