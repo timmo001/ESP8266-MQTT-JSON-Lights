@@ -38,14 +38,14 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
 /*********************************** LED Defintions ********************************/
 // Real values as requested from the MQTT server
-byte realRed = 0;
-byte realGreen = 0;
-byte realBlue = 0;
+byte realRed = 255;
+byte realGreen = 255;
+byte realBlue = 255;
 
 // Previous requested values
-byte previousRed = 0;
-byte previousGreen = 0;
-byte previousBlue = 0;
+byte previousRed = 255;
+byte previousGreen = 255;
+byte previousBlue = 255;
 
 // Values as set to strip
 byte red = 255;
@@ -53,18 +53,14 @@ byte green = 255;
 byte blue = 255;
 byte brightness = 204; // 80%
 
-
 /******************************** OTHER GLOBALS *******************************/
 const char* on_cmd = "ON";
 const char* off_cmd = "OFF";
 const char* effectString = "solid";
 String previousEffect = "solid";
-String effect = "solid";
 bool stateOn = true;
 bool transitionDone = true;
 bool transitionAbort = false;
-int transition = 60; // 1-150
-int speed = 50; // 1-150
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -211,6 +207,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
   previousRed = red;
   previousGreen = green;
   previousBlue = blue;
+
+  Serial.print("realRed: ");
+  Serial.println(realRed);
+  Serial.print("realGreen: ");
+  Serial.println(realGreen);
+  Serial.print("realBlue: ");
+  Serial.println(realBlue);
+  Serial.print("brightness: ");
+  Serial.println(brightness);
 
   if (stateOn) {
     red = map(realRed, 0, 255, 0, brightness);
@@ -368,19 +373,19 @@ void loop() {
         Fire(55,120,(2*speed/2));
       }
       if (effect == "fade in out") {
-        FadeInOut();
+        FadeInOut(speed / 2);
       }
       if (effect == "strobe") {
-        Strobe(10, speed);
+        Strobe(10, speed / 2);
       }
       if (effect == "theater chase") {
-        theaterChase(speed);
+        theaterChase(speed / 2);
       }
       if (effect == "rainbow cycle") {
-        rainbowCycle(speed/5);
+        rainbowCycle(speed / 5);
       }
       if (effect == "color wipe") {
-        colorWipe(speed/20);
+        colorWipe(speed / 40);
       }
       if (effect == "running lights") {
         RunningLights(speed);

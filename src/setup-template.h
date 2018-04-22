@@ -19,7 +19,9 @@ char* MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 
 char* deviceName = "crystal001";
 
-byte defaultBrightness = 209; // 80&
+byte defaultBrightness = 209; // 80%
+String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)
+int speed = 50; // default speed (1-150)
 
 void setup_config() {
   Serial.println();
