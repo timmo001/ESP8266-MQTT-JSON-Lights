@@ -17,8 +17,9 @@ char* MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 #define PIN 14 // D5 on ESP8266
 #define LED_COUNT 12
 
-char* deviceName = "led";
-byte maxBrightness = 255;
+char* deviceName = "crystal001";
+
+byte defaultBrightness = 209; // 80&
 
 void setup_config() {
   Serial.println();
