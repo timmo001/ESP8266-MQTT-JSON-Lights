@@ -23,15 +23,14 @@
   }
 */
 
-#include <ArduinoJson.h>
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include <Adafruit_NeoPixel.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
-#include <ArduinoOTA.h>
 #include "setup.h"
-
+#include <Adafruit_NeoPixel.h>
+#include <ArduinoJson.h>
+#include <ArduinoOTA.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+#include <PubSubClient.h>
+#include <WiFiUdp.h>
 /****************************************FOR JSON***************************************/
 const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define MQTT_MAX_PACKET_SIZE 512
@@ -54,9 +53,9 @@ byte blue = 255;
 byte brightness = 204; // 80%
 
 /******************************** OTHER GLOBALS *******************************/
-const char* on_cmd = "ON";
-const char* off_cmd = "OFF";
-const char* effectString = "solid";
+const char *on_cmd = "ON";
+const char *off_cmd = "OFF";
+const char *effectString = "solid";
 String previousEffect = "solid";
 bool stateOn = true;
 bool transitionDone = true;
@@ -77,7 +76,7 @@ void setup_wifi() {
   WiFi.mode(WIFI_STA);
   WiFi.hostname(deviceName);
 
-  if (WiFi.status() != WL_CONNECTED) {  // FIX FOR USING 2.3.0 CORE (only .begin if not connected)
+  if (WiFi.status() != WL_CONNECTED) { // FIX FOR USING 2.3.0 CORE (only .begin if not connected)
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   }
 
@@ -95,10 +94,10 @@ void setup_wifi() {
 void sendState() {
   StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
 
-  JsonObject& root = jsonBuffer.createObject();
+  JsonObject &root = jsonBuffer.createObject();
 
   root["state"] = (stateOn) ? on_cmd : off_cmd;
-  JsonObject& color = root.createNestedObject("color");
+  JsonObject &color = root.createNestedObject("color");
   color["r"] = realRed;
   color["g"] = realGreen;
   color["b"] = realBlue;
@@ -115,10 +114,10 @@ void sendState() {
   client.publish(combinedArray, buffer, true);
 }
 
-bool processJson(char* message) {
+bool processJson(char *message) {
   StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
 
-  JsonObject& root = jsonBuffer.parseObject(message);
+  JsonObject &root = jsonBuffer.parseObject(message);
 
   if (!root.success()) {
     Serial.println("parseObject() failed");
@@ -128,11 +127,9 @@ bool processJson(char* message) {
   if (root.containsKey("state")) {
     if (strcmp(root["state"], on_cmd) == 0) {
       stateOn = true;
-    }
-    else if (strcmp(root["state"], off_cmd) == 0) {
+    } else if (strcmp(root["state"], off_cmd) == 0) {
       stateOn = false;
-    }
-    else {
+    } else {
       sendState();
       return false;
     }
@@ -162,7 +159,7 @@ bool processJson(char* message) {
 
 void setOff() {
   stateOn = false;
-  transitionDone = true; // Ensure we dont run the loop
+  transitionDone = true;  // Ensure we dont run the loop
   transitionAbort = true; // Ensure we about any current effect
   previousRed, previousGreen, previousBlue = 0;
 
@@ -170,8 +167,8 @@ void setOff() {
   for (int i = 0; i < LED_COUNT; i++) {
     strip.setPixelColor(i, strip.Color(0, 0, 0));
   }
-  
-  delay(200); // Wait for sequence to complete and stable
+
+  delay(200);              // Wait for sequence to complete and stable
   digitalWrite(PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
   Serial.println("LED: OFF");
 
@@ -187,7 +184,7 @@ void setOn() {
   stateOn = true;
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char *topic, byte *payload, unsigned int length) {
   Serial.println(F(""));
   Serial.print(F("Message arrived ["));
   Serial.print(topic);
@@ -269,8 +266,8 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);       // Initialize the LED_BUILTIN pin as an output (So it doesnt float as a LED is on this pin)
-  digitalWrite(LED_BUILTIN, LOW);     // Turn the status LED on
+  pinMode(LED_BUILTIN, OUTPUT);   // Initialize the LED_BUILTIN pin as an output (So it doesnt float as a LED is on this pin)
+  digitalWrite(LED_BUILTIN, LOW); // Turn the status LED on
   // pinMode(DATA_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
   // digitalWrite(DATA_PIN_RELAY, LOW);  // Turn the LED strip on
 
@@ -305,7 +302,7 @@ void setup() {
 
   //OTA SETUP
   ArduinoOTA.setPort(OTAport);
-  ArduinoOTA.setHostname(deviceName); // Hostname defaults to esp8266-[ChipID]
+  ArduinoOTA.setHostname(deviceName);                // Hostname defaults to esp8266-[ChipID]
   ArduinoOTA.setPassword((const char *)OTApassword); // No authentication by default
 
   ArduinoOTA.onStart([]() {
@@ -319,11 +316,16 @@ void setup() {
   });
   ArduinoOTA.onError([](ota_error_t error) {
     Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    if (error == OTA_AUTH_ERROR)
+      Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR)
+      Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR)
+      Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR)
+      Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR)
+      Serial.println("End Failed");
   });
   ArduinoOTA.begin();
 
@@ -332,7 +334,7 @@ void setup() {
   // OK we are connected
   setAll(0, 0, 0, false); // Off / Black ready to turn on
   showStrip();
-  delay(500); // Wait so we can see the green before clearing
+  delay(500);                      // Wait so we can see the green before clearing
   digitalWrite(LED_BUILTIN, HIGH); // Turn the status LED off
 }
 
@@ -354,8 +356,8 @@ void loop() {
 
   transitionAbort = false; // Because we came from the loop and not 1/2 way though a transition
 
-  if (!transitionDone) {  // Once we have completed the transition, No point to keep going though the process
-    if (stateOn) {   // if the light is turned on
+  if (!transitionDone) { // Once we have completed the transition, No point to keep going though the process
+    if (stateOn) {       // if the light is turned on
 
       //EFFECTS
       if (effect == "solid") {
@@ -400,7 +402,7 @@ void loop() {
         sparkle(speed);
       }
       if (effect == "twinkle random") {
-        twinkleRandom(20, (2*speed), false);
+        twinkleRandom(20, (2 * speed), false);
       }
       if (effect == "bouncing balls") {
         bouncingBalls(3);
@@ -429,9 +431,7 @@ void loop() {
       setAll(0, 0, 0, 0);
       transitionDone = true;
     }
-  }
-  else
-  {
-	  delay(600); // Save some power? (from 0.9w to 0.4w when off with ESP8266)
+  } else {
+    delay(600); // Save some power? (from 0.9w to 0.4w when off with ESP8266)
   }
 }
