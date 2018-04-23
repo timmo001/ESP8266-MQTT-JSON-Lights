@@ -11,17 +11,15 @@ bool shouldAbortEffect() {
 }
 
 void showStrip() {
-  if (!stateOn) {
+  if (!stateOn)
     return;
-  }
 
   strip.show();
 }
 
 void setPixel(int pixel, byte r, byte g, byte b, bool applyBrightness) {
-  if (!stateOn) {
+  if (!stateOn)
     return;
-  }
 
   if (applyBrightness) {
     r = map(r, 0, 255, 0, brightness);
@@ -33,9 +31,8 @@ void setPixel(int pixel, byte r, byte g, byte b, bool applyBrightness) {
 }
 
 void setAll(byte r, byte g, byte b, bool refreshStrip = true) {
-  if (!stateOn) {
+  if (!stateOn)
     return;
-  }
 
   for (int i = 0; i < LED_COUNT; i++) {
     setPixel(i, r, g, b, false);
