@@ -1,3 +1,5 @@
+using namespace std;
+
 #ifndef _NEOPIXEL_EFFECTS
 #define _NEOPIXEL_EFFECTS
 

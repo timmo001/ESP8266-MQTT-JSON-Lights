@@ -1,4 +1,6 @@
-/* Add your keys & rename this file to auth.h */
+/* Add your keys & rename this file to setup.h */
+using namespace std;
+
 #ifndef _AUTH_DETAILS
 #define _AUTH_DETAILS
 
@@ -9,7 +11,7 @@
 #define MQTT_USER "USERNAME"
 #define MQTT_PASSWORD "PASSWORD"
 #define MQTT_PORT 1883
-char *MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<deviceName>/set
+char* MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<deviceName>/set
 
 #define OTApassword "PASSWORD" //the password you will need to enter to upload remotely via the ArduinoIDE
 #define OTAport 8266
@@ -17,7 +19,7 @@ char *MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 #define PIN 14 // D5 on ESP8266
 #define LED_COUNT 12
 
-char *deviceName = "crystal001";
+char* deviceName = "led";
 
 byte defaultBrightness = 209;    // 80%
 String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)

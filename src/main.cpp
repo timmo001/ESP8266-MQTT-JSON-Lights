@@ -22,8 +22,8 @@
     "state": "ON"
   }
 */
+using namespace std;
 
-#include "setup.h"
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
@@ -31,6 +31,8 @@
 #include <ESP8266mDNS.h>
 #include <PubSubClient.h>
 #include <WiFiUdp.h>
+#include "setup.h"
+
 /****************************************FOR JSON***************************************/
 const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define MQTT_MAX_PACKET_SIZE 512
@@ -358,7 +360,6 @@ void loop() {
 
   if (!transitionDone) { // Once we have completed the transition, No point to keep going though the process
     if (stateOn) {       // if the light is turned on
-
       //EFFECTS
       if (effect == "solid") {
         if (speed <= 1) {
