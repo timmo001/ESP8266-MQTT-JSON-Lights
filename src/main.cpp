@@ -65,7 +65,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_GRB + NEO_KHZ800);
 
-#include "NeoPixel_Effects.h"
+#include "effects.h"
 
 void setup_wifi() {
   delay(10);
