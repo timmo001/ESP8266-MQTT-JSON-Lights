@@ -61,9 +61,9 @@ void twinkle(int Count, int speed, boolean OnlyOne) {
   setAll(0, 0, 0);
 
   for (int i = 0; i < Count; i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setPixel(random(LED_COUNT), red, green, blue, false);
     showStrip();
     delay(speed);
@@ -79,9 +79,9 @@ void twinkle(int Count, int speed, boolean OnlyOne) {
 void cylonBounce(int EyeSize, int speed, int returnDelay) {
 
   for (int i = 0; i < (LED_COUNT - EyeSize - 2); i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setAll(0, 0, 0, false);
     setPixel(i, red / 10, green / 10, blue / 10, false);
     for (int j = 1; j <= EyeSize; j++) {
@@ -95,9 +95,9 @@ void cylonBounce(int EyeSize, int speed, int returnDelay) {
   delay(returnDelay);
 
   for (int i = (LED_COUNT - EyeSize - 2); i > 0; i--) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setAll(0, 0, 0, false);
     setPixel(i, red / 10, green / 10, blue / 10, false);
     for (int j = 1; j <= EyeSize; j++) {
@@ -170,9 +170,9 @@ void fadeInOut(int speed) {
   float r, g, b;
 
   for (int k = 0; k < 256; k = k + 1) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     r = (k / 256.0) * red;
     g = (k / 256.0) * green;
     b = (k / 256.0) * blue;
@@ -181,9 +181,9 @@ void fadeInOut(int speed) {
   }
 
   for (int k = 255; k >= 0; k = k - 2) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     r = (k / 256.0) * red;
     g = (k / 256.0) * green;
     b = (k / 256.0) * blue;
@@ -198,9 +198,9 @@ void fadeInOut(int speed) {
 // strobe(10, 50);
 void strobe(int strobeCount, int FlashDelay) {
   for (int j = 0; j < strobeCount; j++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setAll(red, green, blue);
     showStrip();
     delay(FlashDelay);
@@ -213,9 +213,9 @@ void strobe(int strobeCount, int FlashDelay) {
 // theaterChase(50);
 void theaterChase(int speed) {
   for (int q = 0; q < 3; q++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     for (int i = 0; i < LED_COUNT; i = i + 3) {
       setPixel(i + q, red, green, blue, false); //turn every third pixel on
     }
@@ -264,9 +264,9 @@ void rainbowCycle(int speed) {
   byte *c;
   uint16_t i, j;
   for (j = 0; j < 256 * 2; j++) { // 2 cycles of all colors on wheel
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     rainbow(c, i, j);
     showStrip();
     delay(speed);
@@ -276,9 +276,9 @@ void rainbowCycle(int speed) {
 //  colorWipe(50);
 void colorWipe(int speed) {
   for (uint16_t i = 0; i < LED_COUNT; i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setPixel(i, red, green, blue, false);
     showStrip();
     delay(speed);
@@ -303,9 +303,9 @@ void runningLights(int WaveDelay) {
   int Position = 0;
 
   for (int i = 0; i < LED_COUNT; i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     Position++; // = 0; //Position + Rate;
     for (int i = 0; i < LED_COUNT; i++) {
       // sine wave, 3 offset waves make a rainbow!
@@ -351,9 +351,9 @@ void twinkleRandom(int Count, int speed, boolean OnlyOne) {
   setAll(0, 0, 0);
 
   for (int i = 0; i < Count; i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     setPixel(random(LED_COUNT), random(0, 255), random(0, 255), random(0, 255), true);
     showStrip();
     delay(speed);
@@ -388,9 +388,9 @@ void bouncingBalls(int BallCount) {
   }
 
   while (true) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
+
     for (int i = 0; i < BallCount; i++) {
       TimeSinceLastBounce[i] = millis() - ClockTimeSinceLastBounce[i];
       Height[i] = 0.5 * Gravity * pow(TimeSinceLastBounce[i] / 1000, 2.0) + ImpactVelocity[i] * TimeSinceLastBounce[i] / 1000;
@@ -487,9 +487,8 @@ void fade(int speed) {
   }
 
   for (int i = 0; i < 1020; i++) {
-    if (shouldAbortEffect()) {
+    if (shouldAbortEffect())
       return;
-    }
 
     redVal = calculateVal(stepR, redVal, i);
     grnVal = calculateVal(stepG, grnVal, i);
