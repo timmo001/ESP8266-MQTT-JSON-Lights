@@ -79,7 +79,6 @@ light:
     - bicolor chase
     - tricolor chase
     - icu
-    - custom
   brightness: true
   flash: true
   rgb: true

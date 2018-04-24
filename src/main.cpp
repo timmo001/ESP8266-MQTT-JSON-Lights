@@ -230,9 +230,6 @@ void setEffect(String effect) {
   if (effect == "icu") {
     ws2812fx.setMode(FX_MODE_ICU);
   }
-  if (effect == "custom") {
-    ws2812fx.setMode(FX_MODE_CUSTOM);
-  }
 
   Serial.println(ws2812fx.getModeName(ws2812fx.getMode()));
 }
