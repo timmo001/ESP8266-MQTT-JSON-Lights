@@ -23,24 +23,66 @@ light:
   command_topic: 'light/led/set'
   effect: true
   effect_list:
-    - solid
-    - twinkle
-    - cylon bounce
-    - fire
-    - fade in out
-    - strobe
-    - theater chase
-    - rainbow cycle
+    - static
+    - blink
+    - breath
     - color wipe
+    - color wipe inverted
+    - color wipe reverse
+    - color wipe reverse inverted
+    - color wipe random
+    - random color
+    - single dynamic
+    - multi dynamic
+    - rainbow
+    - rainbow cycle
+    - scan
+    - dual scan
+    - fade
+    - theater chase
+    - theater chase rainbow
     - running lights
-    - snow sparkle
-    - sparkle
+    - twinkle
     - twinkle random
-    - lightning
+    - twinkle fade
+    - twinkle fade random
+    - sparkle
+    - flash sparkle
+    - hyper sparkle
+    - strobe
+    - strobe rainbow
+    - multi strobe
+    - blink rainbow
+    - chase white
+    - chase_color
+    - chase random
+    - chase rainbow
+    - chase flash
+    - chase random
+    - chase rainbow white
+    - chase blackout
+    - chase blackout rainbow
+    - color sweep random
+    - running color
+    - running red blue
+    - runnning random
+    - larson scanner
+    - comet
+    - fireworks
+    - fireworks random
+    - merry christmas
+    - fire flicker
+    - fire flicker soft
+    - fire flicker intense
+    - circus combustus
+    - halloween
+    - bicolor chase
+    - tricolor chase
+    - icu
+    - custom
   brightness: true
   flash: true
   rgb: true
-  white_value: true
   speed: true
   optimistic: false
   qos: 0
