@@ -24,7 +24,7 @@
 */
 using namespace std;
 
-#include <Adafruit_NeoPixel.h>
+#include <WS2812FX.h>
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
 #include <ESP8266WiFi.h>
@@ -65,9 +65,9 @@ bool transitionAbort = false;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_GRB + NEO_KHZ800);
+WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
-#include "effects.h"
+// #include "effects.h"
 
 void setup_wifi() {
   delay(10);
@@ -166,12 +166,12 @@ void setOff() {
   previousRed, previousGreen, previousBlue = 0;
 
   // Set all leds to 0
-  for (int i = 0; i < LED_COUNT; i++) {
-    strip.setPixelColor(i, strip.Color(0, 0, 0));
-  }
+  // for (int i = 0; i < LED_COUNT; i++) {
+  //   strip.setPixelColor(i, strip.Color(0, 0, 0));
+  // }
 
-  delay(200);              // Wait for sequence to complete and stable
-  digitalWrite(PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
+  // delay(200);              // Wait for sequence to complete and stable
+  // digitalWrite(LED_PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
   Serial.println("LED: OFF");
 
   // NOTE: Should really set the xxx pin to be an input to ensure that data is not sent and to stop potential current flow.
@@ -179,8 +179,8 @@ void setOff() {
 }
 
 void setOn() {
-  digitalWrite(PIN, LOW);
-  delay(1000); // Wait for Leds to init and capasitor to charge??
+  // digitalWrite(LED_PIN, LOW);
+  // delay(1000); // Wait for Leds to init and capasitor to charge??
   Serial.println("LED: ON");
 
   stateOn = true;
@@ -270,8 +270,8 @@ void reconnect() {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);   // Initialize the LED_BUILTIN pin as an output (So it doesnt float as a LED is on this pin)
   digitalWrite(LED_BUILTIN, LOW); // Turn the status LED on
-  // pinMode(DATA_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
-  // digitalWrite(DATA_PIN_RELAY, LOW);  // Turn the LED strip on
+  // pinMode(DATA_LED_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
+  // digitalWrite(DATA_LED_PIN_RELAY, LOW);  // Turn the LED strip on
 
   Serial.begin(115200);
 
@@ -279,9 +279,11 @@ void setup() {
   setup_config();
 
   // End of trinket special code
-  strip.setBrightness(defaultBrightness);
-  strip.begin();
-  strip.show(); // Initialize all pixels to 'off'
+  ws2812fx.init();
+  ws2812fx.setBrightness(defaultBrightness);
+  ws2812fx.setSpeed(200);
+  ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
+  ws2812fx.start();
 
   // Standalone startup sequence - Wipe White
   // for(uint16_t i = 0; i < LED_COUNT; i++) {
@@ -362,60 +364,60 @@ void loop() {
     if (stateOn) {       // if the light is turned on
       //EFFECTS
       if (effect == "solid") {
-        if (speed <= 1) {
-          setAll(red, green, blue);
-          transitionDone = true;
-        } else {
-          fade(speed);
-        }
+        // if (speed <= 1) {
+        //   setAll(red, green, blue);
+        //   transitionDone = true;
+        // } else {
+        //   fade(speed);
+        // }
       }
       if (effect == "twinkle") {
-        twinkle(10, (2 * speed), false);
+        // twinkle(10, (2 * speed), false);
       }
       if (effect == "cylon bounce") {
-        cylonBounce(4, speed / 10, 50);
+        // cylonBounce(4, speed / 10, 50);
       }
       if (effect == "fire") {
-        fire(55, 120, (2 * speed / 2));
+        // fire(55, 120, (2 * speed / 2));
       }
       if (effect == "fade in out") {
-        fadeInOut(speed / 2);
+        // fadeInOut(speed / 2);
       }
       if (effect == "strobe") {
-        strobe(10, speed / 2);
+        // strobe(10, speed / 2);
       }
       if (effect == "theater chase") {
-        theaterChase(speed / 2);
+        // theaterChase(speed / 2);
       }
       if (effect == "rainbow cycle") {
-        rainbowCycle(speed / 5);
+        // rainbowCycle(speed / 5);
       }
       if (effect == "color wipe") {
-        colorWipe(speed / 40);
+        // colorWipe(speed / 40);
       }
       if (effect == "running lights") {
-        runningLights(speed);
+        // runningLights(speed);
       }
       if (effect == "snow sparkle") {
-        snowSparkle(20, random(speed, (10 * speed)));
+        // snowSparkle(20, random(speed, (10 * speed)));
       }
       if (effect == "sparkle") {
-        sparkle(speed);
+        // sparkle(speed);
       }
       if (effect == "twinkle random") {
-        twinkleRandom(20, (2 * speed), false);
+        // twinkleRandom(20, (2 * speed), false);
       }
       if (effect == "bouncing balls") {
-        bouncingBalls(3);
+        // bouncingBalls(3);
       }
       if (effect == "lightning") {
-        lightning(speed);
+        // lightning(speed);
       }
 
       // Run once notification effects
       // Reverts color and effect after run
       if (effect == "color wipe once") {
-        colorWipeOnce(speed);
+        // colorWipeOnce(speed);
 
         if (effect != "color wipe once") {
           effect = previousEffect;
@@ -429,7 +431,7 @@ void loop() {
         sendState();
       }
     } else {
-      setAll(0, 0, 0, 0);
+      // setAll(0, 0, 0, 0);
       transitionDone = true;
     }
   } else {
