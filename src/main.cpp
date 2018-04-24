@@ -38,13 +38,12 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define MQTT_MAX_PACKET_SIZE 512
 
 /*********************************** Defaults ********************************/
-byte defaultBrightness = 209;    // 80%
-String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)
-int speed = 50;                  // default speed (1-150)
 byte red = 255;
 byte green = 255;
 byte blue = 255;
-byte brightness = 204; // 80%
+byte brightness = 204;           // 80%
+String effect = "rainbow cycle"; // default effect ("static", "rainbow cycle" etc.)
+int speed = 50;
 
 /******************************** OTHER GLOBALS *******************************/
 const char *on_cmd = "ON";
@@ -391,7 +390,7 @@ void setup() {
 
   // End of trinket special code
   ws2812fx.init();
-  ws2812fx.setBrightness(defaultBrightness);
+  ws2812fx.setBrightness(brightness);
   ws2812fx.setSpeed(speed);
   ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
   ws2812fx.start();
