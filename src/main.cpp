@@ -188,7 +188,7 @@ void setEffect(String effect) {
   if (effect == "running red blue") {
     ws2812fx.setMode(FX_MODE_RUNNING_RED_BLUE);
   }
-  if (effect == "runnning random") {
+  if (effect == "running random") {
     ws2812fx.setMode(FX_MODE_RUNNING_RANDOM);
   }
   if (effect == "larson scanner") {

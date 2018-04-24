@@ -65,7 +65,7 @@ light:
     - color sweep random
     - running color
     - running red blue
-    - runnning random
+    - running random
     - larson scanner
     - comet
     - fireworks
