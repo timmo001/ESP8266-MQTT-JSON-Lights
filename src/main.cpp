@@ -67,6 +67,7 @@ String previousEffect = "solid";
 bool stateOn = true;
 bool transitionDone = true;
 bool transitionAbort = false;
+byte effectNumber = 12;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -76,6 +77,123 @@ WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 unsigned long rgbToHex(int r, int g, int b) {
   return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+}
+
+byte getEffect(const char *effect) {
+  if (effect == "static")
+    return FX_MODE_STATIC;
+  if (effect == "blink")
+    return FX_MODE_BLINK;
+  if (effect == "breath")
+    return FX_MODE_BREATH;
+  if (effect == "color wipe")
+    return FX_MODE_COLOR_WIPE;
+  if (effect == "color wipe inverted")
+    return FX_MODE_COLOR_WIPE_INV;
+  if (effect == "color wipe reverse")
+    return FX_MODE_COLOR_WIPE_REV;
+  if (effect == "color wipe reverse inverted")
+    return FX_MODE_COLOR_WIPE_REV_INV;
+  if (effect == "color wipe random")
+    return FX_MODE_COLOR_WIPE_RANDOM;
+  if (effect == "random color")
+    return FX_MODE_RANDOM_COLOR;
+  if (effect == "single dynamic")
+    return FX_MODE_SINGLE_DYNAMIC;
+  if (effect == "multi dynamic")
+    return FX_MODE_MULTI_DYNAMIC;
+  if (effect == "rainbow")
+    return FX_MODE_RAINBOW;
+  if (effect == "rainbow cycle")
+    return FX_MODE_RAINBOW_CYCLE;
+  if (effect == "scan")
+    return FX_MODE_SCAN;
+  if (effect == "dual scan")
+    return FX_MODE_DUAL_SCAN;
+  if (effect == "fade")
+    return FX_MODE_FADE;
+  if (effect == "theater chase")
+    return FX_MODE_THEATER_CHASE;
+  if (effect == "theater chase rainbow")
+    return FX_MODE_THEATER_CHASE_RAINBOW;
+  if (effect == "running lights")
+    return FX_MODE_RUNNING_LIGHTS;
+  if (effect == "twinkle")
+    return FX_MODE_TWINKLE;
+  if (effect == "twinkle random")
+    return FX_MODE_TWINKLE_RANDOM;
+  if (effect == "twinkle fade")
+    return FX_MODE_TWINKLE_FADE;
+  if (effect == "twinkle fade random")
+    return FX_MODE_TWINKLE_FADE_RANDOM;
+  if (effect == "sparkle")
+    return FX_MODE_SPARKLE;
+  if (effect == "flash sparkle")
+    return FX_MODE_FLASH_SPARKLE;
+  if (effect == "hyper sparkle")
+    return FX_MODE_HYPER_SPARKLE;
+  if (effect == "strobe")
+    return FX_MODE_STROBE;
+  if (effect == "strobe rainbow")
+    return FX_MODE_STROBE_RAINBOW;
+  if (effect == "multi strobe")
+    return FX_MODE_MULTI_STROBE;
+  if (effect == "blink rainbow")
+    return FX_MODE_BLINK_RAINBOW;
+  if (effect == "chase white")
+    return FX_MODE_CHASE_WHITE;
+  if (effect == "chase_color")
+    return FX_MODE_CHASE_COLOR;
+  if (effect == "chase random")
+    return FX_MODE_CHASE_RANDOM;
+  if (effect == "chase rainbow")
+    return FX_MODE_CHASE_RAINBOW;
+  if (effect == "chase flash")
+    return FX_MODE_CHASE_FLASH;
+  if (effect == "chase random")
+    return FX_MODE_CHASE_FLASH_RANDOM;
+  if (effect == "chase rainbow white")
+    return FX_MODE_CHASE_RAINBOW_WHITE;
+  if (effect == "chase blackout")
+    return FX_MODE_CHASE_BLACKOUT;
+  if (effect == "chase blackout rainbow")
+    return FX_MODE_CHASE_BLACKOUT_RAINBOW;
+  if (effect == "color sweep random")
+    return FX_MODE_COLOR_SWEEP_RANDOM;
+  if (effect == "running color")
+    return FX_MODE_RUNNING_COLOR;
+  if (effect == "running red blue")
+    return FX_MODE_RUNNING_RED_BLUE;
+  if (effect == "runnning random")
+    return FX_MODE_RUNNING_RANDOM;
+  if (effect == "larson scanner")
+    return FX_MODE_LARSON_SCANNER;
+  if (effect == "comet")
+    return FX_MODE_COMET;
+  if (effect == "fireworks")
+    return FX_MODE_FIREWORKS;
+  if (effect == "fireworks random")
+    return FX_MODE_FIREWORKS_RANDOM;
+  if (effect == "merry christmas")
+    return FX_MODE_MERRY_CHRISTMAS;
+  if (effect == "fire flicker")
+    return FX_MODE_FIRE_FLICKER;
+  if (effect == "fire flicker soft")
+    return FX_MODE_FIRE_FLICKER_SOFT;
+  if (effect == "fire flicker intense")
+    return FX_MODE_FIRE_FLICKER_INTENSE;
+  if (effect == "circus combustus")
+    return FX_MODE_CIRCUS_COMBUSTUS;
+  if (effect == "halloween")
+    return FX_MODE_HALLOWEEN;
+  if (effect == "bicolor chase")
+    return FX_MODE_BICOLOR_CHASE;
+  if (effect == "tricolor chase")
+    return FX_MODE_TRICOLOR_CHASE;
+  if (effect == "icu")
+    return FX_MODE_ICU;
+  if (effect == "custom")
+    return FX_MODE_CUSTOM;
 }
 
 void setup_wifi() {
@@ -138,8 +256,11 @@ bool processJson(char *message) {
   if (root.containsKey("state")) {
     if (strcmp(root["state"], on_cmd) == 0) {
       stateOn = true;
+      if (!ws2812fx.isRunning())
+        ws2812fx.start();
     } else if (strcmp(root["state"], off_cmd) == 0) {
       stateOn = false;
+      ws2812fx.stop();
     } else {
       sendState();
       return false;
@@ -148,6 +269,7 @@ bool processJson(char *message) {
 
   if (root.containsKey("speed")) {
     speed = root["speed"];
+    ws2812fx.setSpeed(speed * 100);
   }
 
   if (root.containsKey("color")) {
@@ -164,8 +286,11 @@ bool processJson(char *message) {
 
   if (root.containsKey("effect")) {
     effectString = root["effect"];
-    // effect = effectString.;
-    // ws2812fx.setMode(FX_MODE_);
+    effect = effectString;
+    effectNumber = getEffect(effectString);
+    ws2812fx.stop();
+    ws2812fx.setMode(effectNumber);
+    ws2812fx.start();
   }
 
   return true;
@@ -174,13 +299,11 @@ bool processJson(char *message) {
 void setOff() {
   stateOn = false;
   previousRed, previousGreen, previousBlue = 0;
-
   Serial.println("LED: OFF");
 }
 
 void setOn() {
   stateOn = true;
-
   Serial.println("LED: ON");
 }
 
@@ -215,6 +338,10 @@ void callback(char *topic, byte *payload, unsigned int length) {
   Serial.println(realBlue);
   Serial.print("brightness: ");
   Serial.println(brightness);
+  Serial.print("effect: ");
+  Serial.println(effect);
+  Serial.print("effectNumber: ");
+  Serial.println(effectNumber);
 
   if (stateOn) {
     red = map(realRed, 0, 255, 0, brightness);
@@ -225,9 +352,6 @@ void callback(char *topic, byte *payload, unsigned int length) {
     green = 0;
     blue = 0;
   }
-
-  Serial.print("effect: ");
-  Serial.println(effect);
 
   if (stateOn) {
     setOn();
