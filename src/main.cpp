@@ -230,8 +230,6 @@ void setEffect(String effect) {
   if (effect == "icu") {
     ws2812fx.setMode(FX_MODE_ICU);
   }
-
-  Serial.println(ws2812fx.getModeName(ws2812fx.getMode()));
 }
 
 void setup_wifi() {
@@ -450,6 +448,4 @@ void loop() {
   ArduinoOTA.handle(); // Check OTA Firmware Updates
 
   ws2812fx.service();
-
-  // Serial.println(ws2812fx.getModeName(ws2812fx.getMode()));
 }
