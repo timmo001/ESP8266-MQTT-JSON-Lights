@@ -37,6 +37,11 @@ using namespace std;
 const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define MQTT_MAX_PACKET_SIZE 512
 
+/*********************************** Defaults ********************************/
+byte defaultBrightness = 209;    // 80%
+String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)
+int speed = 50;                  // default speed (1-150)
+
 /*********************************** LED Defintions ********************************/
 // Real values as requested from the MQTT server
 byte realRed = 255;
@@ -69,25 +74,13 @@ WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // #include "effects.h"
 
-string rgbToHex(int rNum, int gNum, int bNum) {
-  string result;
-
-  char r[255];
-  sprintf_s(r, "%.2X", rNum);
-  result.append(r);
-  char g[255];
-  sprintf_s(g, "%.2X", gNum);
-  result.append(g);
-  char b[255];
-  sprintf_s(b, "%.2X", bNum);
-  result.append(b);
-
-  return result;
+unsigned long rgbToHex(int r, int g, int b) {
+  return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
 void setup_wifi() {
   delay(10);
-  Serial.print(F("Connecting to SSID: "));
+  Serial.print("Connecting to SSID: ");
   Serial.println(WIFI_SSID);
 
   // We start by connecting to a WiFi network
@@ -100,12 +93,12 @@ void setup_wifi() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(F("."));
+    Serial.print(".");
   }
 
-  Serial.println(F(""));
-  Serial.println(F("WiFi connected"));
-  Serial.print(F("IP address: "));
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 }
 
@@ -171,8 +164,8 @@ bool processJson(char *message) {
 
   if (root.containsKey("effect")) {
     effectString = root["effect"];
-    effect = effectString.;
-    ws2812fx.setMode(FX_MODE_)
+    // effect = effectString.;
+    // ws2812fx.setMode(FX_MODE_);
   }
 
   return true;
@@ -192,10 +185,10 @@ void setOn() {
 }
 
 void callback(char *topic, byte *payload, unsigned int length) {
-  Serial.println(F(""));
-  Serial.print(F("Message arrived ["));
+  Serial.println("");
+  Serial.print("Message arrived [");
   Serial.print(topic);
-  Serial.print(F("] "));
+  Serial.print("] ");
 
   char message[length + 1];
   for (int i = 0; i < length; i++) {
@@ -248,10 +241,10 @@ void callback(char *topic, byte *payload, unsigned int length) {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print(F("Attempting MQTT connection..."));
+    Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     if (client.connect(deviceName, MQTT_USER, MQTT_PASSWORD)) {
-      Serial.println(F("connected"));
+      Serial.println("connected");
 
       char combinedArray[sizeof(MQTT_STATE_TOPIC_PREFIX) + sizeof(deviceName) + 4];
       sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
@@ -260,9 +253,9 @@ void reconnect() {
       setOff();
       sendState();
     } else {
-      Serial.print(F("failed, rc="));
+      Serial.print("failed, rc=");
       Serial.print(client.state());
-      Serial.println(F(" try again in 5 seconds"));
+      Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
     }
@@ -278,7 +271,7 @@ void setup() {
   Serial.begin(115200);
 
   delay(500); // Wait for Leds to init and Cap to charge
-  setup_config();
+  // setup_config();
 
   // End of trinket special code
   ws2812fx.init();
@@ -307,7 +300,7 @@ void setup() {
     Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
   });
   ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
+    Serial.print("Error[%u]: " + error);
     if (error == OTA_AUTH_ERROR)
       Serial.println("Auth Failed");
     else if (error == OTA_BEGIN_ERROR)
@@ -321,7 +314,7 @@ void setup() {
   });
   ArduinoOTA.begin();
 
-  Serial.println(F("Ready"));
+  Serial.println("Ready");
 
   // OK we are connected
 }
@@ -333,7 +326,7 @@ void loop() {
 
   if (WiFi.status() != WL_CONNECTED) {
     delay(1);
-    Serial.print(F("WIFI Disconnected. Attempting reconnection."));
+    Serial.print("WIFI Disconnected. Attempting reconnection.");
     setup_wifi();
     return;
   }
