@@ -59,7 +59,7 @@ unsigned long rgbToHex(int r, int g, int b) {
   return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
-void setEffect(const char *effect) {
+void setEffect(String effect) {
   Serial.println(effect);
 
   if (effect == "static") {
@@ -323,7 +323,7 @@ bool processJson(char *message) {
   if (root.containsKey("effect")) {
     effectString = root["effect"];
     effect = effectString;
-    setEffect(effectString);    
+    setEffect(effectString);
   }
 
   if (root.containsKey("speed")) {
@@ -391,7 +391,8 @@ void setup() {
   // End of trinket special code
   ws2812fx.init();
   ws2812fx.setBrightness(brightness);
-  ws2812fx.setSpeed(speed);
+  ws2812fx.setColor(rgbToHex(red, green, blue));
+  ws2812fx.setSpeed(speed * 100);
   ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
   ws2812fx.start();
   stateOn = true;
