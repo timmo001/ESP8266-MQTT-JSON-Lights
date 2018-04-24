@@ -48,7 +48,7 @@ int speed = 50;
 /******************************** OTHER GLOBALS *******************************/
 const char *on_cmd = "ON";
 const char *off_cmd = "OFF";
-const char *effectString = "solid";
+const char *effectString = "rainbow cycle";
 bool stateOn = true;
 
 WiFiClient espClient;
@@ -323,7 +323,7 @@ bool processJson(char *message) {
   if (root.containsKey("effect")) {
     effectString = root["effect"];
     effect = effectString;
-    setEffect(effectString);
+    setEffect(effectString);    
   }
 
   if (root.containsKey("speed")) {
