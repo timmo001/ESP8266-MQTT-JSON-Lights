@@ -24,14 +24,14 @@
 */
 using namespace std;
 
-#include <WS2812FX.h>
+#include "setup.h"
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <PubSubClient.h>
+#include <WS2812FX.h>
 #include <WiFiUdp.h>
-#include "setup.h"
 
 /****************************************FOR JSON***************************************/
 const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
@@ -68,6 +68,22 @@ PubSubClient client(espClient);
 WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // #include "effects.h"
+
+string rgbToHex(int rNum, int gNum, int bNum) {
+  string result;
+
+  char r[255];
+  sprintf_s(r, "%.2X", rNum);
+  result.append(r);
+  char g[255];
+  sprintf_s(g, "%.2X", gNum);
+  result.append(g);
+  char b[255];
+  sprintf_s(b, "%.2X", bNum);
+  result.append(b);
+
+  return result;
+}
 
 void setup_wifi() {
   delay(10);
@@ -145,15 +161,18 @@ bool processJson(char *message) {
     realRed = root["color"]["r"];
     realGreen = root["color"]["g"];
     realBlue = root["color"]["b"];
+    ws2812fx.setColor(rgbToHex(realRed, realGreen, realBlue));
   }
 
   if (root.containsKey("brightness")) {
     brightness = root["brightness"];
+    ws2812fx.setBrightness(brightness);
   }
 
   if (root.containsKey("effect")) {
     effectString = root["effect"];
-    effect = effectString;
+    effect = effectString.;
+    ws2812fx.setMode(FX_MODE_)
   }
 
   return true;
@@ -161,29 +180,15 @@ bool processJson(char *message) {
 
 void setOff() {
   stateOn = false;
-  transitionDone = true;  // Ensure we dont run the loop
-  transitionAbort = true; // Ensure we about any current effect
   previousRed, previousGreen, previousBlue = 0;
 
-  // Set all leds to 0
-  // for (int i = 0; i < LED_COUNT; i++) {
-  //   strip.setPixelColor(i, strip.Color(0, 0, 0));
-  // }
-
-  // delay(200);              // Wait for sequence to complete and stable
-  // digitalWrite(LED_PIN, HIGH); // Do NOT write to strip while it has no power. (https://forums.adafruit.com/viewtopic.php?f=47&t=100265)
   Serial.println("LED: OFF");
-
-  // NOTE: Should really set the xxx pin to be an input to ensure that data is not sent and to stop potential current flow.
-  //Writing to pin in INPUT/High-impedance mode enables/disables the internal pullup resistors. But the high impedance ensures that any current flow through the pin will be negligible.
 }
 
 void setOn() {
-  // digitalWrite(LED_PIN, LOW);
-  // delay(1000); // Wait for Leds to init and capasitor to charge??
-  Serial.println("LED: ON");
-
   stateOn = true;
+
+  Serial.println("LED: ON");
 }
 
 void callback(char *topic, byte *payload, unsigned int length) {
@@ -230,9 +235,6 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
   Serial.print("effect: ");
   Serial.println(effect);
-
-  transitionAbort = true; // Kill the current effect
-  transitionDone = false; // Start a new transition
 
   if (stateOn) {
     setOn();
@@ -285,21 +287,7 @@ void setup() {
   ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
   ws2812fx.start();
 
-  // Standalone startup sequence - Wipe White
-  // for(uint16_t i = 0; i < LED_COUNT; i++) {
-  //   setPixel(i, 255, 255, 255, false);
-  //   showStrip();
-  //   delay(1); // Need delay to be like a yield so it will not restatrt
-  // }
-  byte *c;
-  rainbow(c, 0, 0);
-  showStrip();
-
   setup_wifi();
-
-  // OK we are on Wifi so we are no standalone.
-  setPixel(0, 255, 0, 0, false); // Red tinge on first Pixel
-  showStrip();
 
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback);
@@ -336,10 +324,6 @@ void setup() {
   Serial.println(F("Ready"));
 
   // OK we are connected
-  setAll(0, 0, 0, false); // Off / Black ready to turn on
-  showStrip();
-  delay(500);                      // Wait so we can see the green before clearing
-  digitalWrite(LED_BUILTIN, HIGH); // Turn the status LED off
 }
 
 void loop() {
@@ -358,83 +342,5 @@ void loop() {
 
   ArduinoOTA.handle(); // Check OTA Firmware Updates
 
-  transitionAbort = false; // Because we came from the loop and not 1/2 way though a transition
-
-  if (!transitionDone) { // Once we have completed the transition, No point to keep going though the process
-    if (stateOn) {       // if the light is turned on
-      //EFFECTS
-      if (effect == "solid") {
-        // if (speed <= 1) {
-        //   setAll(red, green, blue);
-        //   transitionDone = true;
-        // } else {
-        //   fade(speed);
-        // }
-      }
-      if (effect == "twinkle") {
-        // twinkle(10, (2 * speed), false);
-      }
-      if (effect == "cylon bounce") {
-        // cylonBounce(4, speed / 10, 50);
-      }
-      if (effect == "fire") {
-        // fire(55, 120, (2 * speed / 2));
-      }
-      if (effect == "fade in out") {
-        // fadeInOut(speed / 2);
-      }
-      if (effect == "strobe") {
-        // strobe(10, speed / 2);
-      }
-      if (effect == "theater chase") {
-        // theaterChase(speed / 2);
-      }
-      if (effect == "rainbow cycle") {
-        // rainbowCycle(speed / 5);
-      }
-      if (effect == "color wipe") {
-        // colorWipe(speed / 40);
-      }
-      if (effect == "running lights") {
-        // runningLights(speed);
-      }
-      if (effect == "snow sparkle") {
-        // snowSparkle(20, random(speed, (10 * speed)));
-      }
-      if (effect == "sparkle") {
-        // sparkle(speed);
-      }
-      if (effect == "twinkle random") {
-        // twinkleRandom(20, (2 * speed), false);
-      }
-      if (effect == "bouncing balls") {
-        // bouncingBalls(3);
-      }
-      if (effect == "lightning") {
-        // lightning(speed);
-      }
-
-      // Run once notification effects
-      // Reverts color and effect after run
-      if (effect == "color wipe once") {
-        // colorWipeOnce(speed);
-
-        if (effect != "color wipe once") {
-          effect = previousEffect;
-        }
-
-        if (red == 0 && green == 0 && blue == 0) {
-          setOff();
-        } else {
-          transitionDone = false; // Run the old effect again
-        }
-        sendState();
-      }
-    } else {
-      // setAll(0, 0, 0, 0);
-      transitionDone = true;
-    }
-  } else {
-    delay(600); // Save some power? (from 0.9w to 0.4w when off with ESP8266)
-  }
+  ws2812fx.service();
 }
