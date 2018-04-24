@@ -41,8 +41,6 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 byte defaultBrightness = 209;    // 80%
 String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)
 int speed = 50;                  // default speed (1-150)
-
-/*********************************** LED Defintions ********************************/
 byte red = 255;
 byte green = 255;
 byte blue = 255;
