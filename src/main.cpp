@@ -43,17 +43,6 @@ String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc
 int speed = 50;                  // default speed (1-150)
 
 /*********************************** LED Defintions ********************************/
-// Real values as requested from the MQTT server
-byte realRed = 255;
-byte realGreen = 255;
-byte realBlue = 255;
-
-// Previous requested values
-byte previousRed = 255;
-byte previousGreen = 255;
-byte previousBlue = 255;
-
-// Values as set to strip
 byte red = 255;
 byte green = 255;
 byte blue = 255;
@@ -63,137 +52,192 @@ byte brightness = 204; // 80%
 const char *on_cmd = "ON";
 const char *off_cmd = "OFF";
 const char *effectString = "solid";
-String previousEffect = "solid";
 bool stateOn = true;
-bool transitionDone = true;
-bool transitionAbort = false;
-byte effectNumber = 12;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
-// #include "effects.h"
-
 unsigned long rgbToHex(int r, int g, int b) {
   return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
-byte getEffect(const char *effect) {
-  if (effect == "static")
-    return FX_MODE_STATIC;
-  if (effect == "blink")
-    return FX_MODE_BLINK;
-  if (effect == "breath")
-    return FX_MODE_BREATH;
-  if (effect == "color wipe")
-    return FX_MODE_COLOR_WIPE;
-  if (effect == "color wipe inverted")
-    return FX_MODE_COLOR_WIPE_INV;
-  if (effect == "color wipe reverse")
-    return FX_MODE_COLOR_WIPE_REV;
-  if (effect == "color wipe reverse inverted")
-    return FX_MODE_COLOR_WIPE_REV_INV;
-  if (effect == "color wipe random")
-    return FX_MODE_COLOR_WIPE_RANDOM;
-  if (effect == "random color")
-    return FX_MODE_RANDOM_COLOR;
-  if (effect == "single dynamic")
-    return FX_MODE_SINGLE_DYNAMIC;
-  if (effect == "multi dynamic")
-    return FX_MODE_MULTI_DYNAMIC;
-  if (effect == "rainbow")
-    return FX_MODE_RAINBOW;
-  if (effect == "rainbow cycle")
-    return FX_MODE_RAINBOW_CYCLE;
-  if (effect == "scan")
-    return FX_MODE_SCAN;
-  if (effect == "dual scan")
-    return FX_MODE_DUAL_SCAN;
-  if (effect == "fade")
-    return FX_MODE_FADE;
-  if (effect == "theater chase")
-    return FX_MODE_THEATER_CHASE;
-  if (effect == "theater chase rainbow")
-    return FX_MODE_THEATER_CHASE_RAINBOW;
-  if (effect == "running lights")
-    return FX_MODE_RUNNING_LIGHTS;
-  if (effect == "twinkle")
-    return FX_MODE_TWINKLE;
-  if (effect == "twinkle random")
-    return FX_MODE_TWINKLE_RANDOM;
-  if (effect == "twinkle fade")
-    return FX_MODE_TWINKLE_FADE;
-  if (effect == "twinkle fade random")
-    return FX_MODE_TWINKLE_FADE_RANDOM;
-  if (effect == "sparkle")
-    return FX_MODE_SPARKLE;
-  if (effect == "flash sparkle")
-    return FX_MODE_FLASH_SPARKLE;
-  if (effect == "hyper sparkle")
-    return FX_MODE_HYPER_SPARKLE;
-  if (effect == "strobe")
-    return FX_MODE_STROBE;
-  if (effect == "strobe rainbow")
-    return FX_MODE_STROBE_RAINBOW;
-  if (effect == "multi strobe")
-    return FX_MODE_MULTI_STROBE;
-  if (effect == "blink rainbow")
-    return FX_MODE_BLINK_RAINBOW;
-  if (effect == "chase white")
-    return FX_MODE_CHASE_WHITE;
-  if (effect == "chase_color")
-    return FX_MODE_CHASE_COLOR;
-  if (effect == "chase random")
-    return FX_MODE_CHASE_RANDOM;
-  if (effect == "chase rainbow")
-    return FX_MODE_CHASE_RAINBOW;
-  if (effect == "chase flash")
-    return FX_MODE_CHASE_FLASH;
-  if (effect == "chase random")
-    return FX_MODE_CHASE_FLASH_RANDOM;
-  if (effect == "chase rainbow white")
-    return FX_MODE_CHASE_RAINBOW_WHITE;
-  if (effect == "chase blackout")
-    return FX_MODE_CHASE_BLACKOUT;
-  if (effect == "chase blackout rainbow")
-    return FX_MODE_CHASE_BLACKOUT_RAINBOW;
-  if (effect == "color sweep random")
-    return FX_MODE_COLOR_SWEEP_RANDOM;
-  if (effect == "running color")
-    return FX_MODE_RUNNING_COLOR;
-  if (effect == "running red blue")
-    return FX_MODE_RUNNING_RED_BLUE;
-  if (effect == "runnning random")
-    return FX_MODE_RUNNING_RANDOM;
-  if (effect == "larson scanner")
-    return FX_MODE_LARSON_SCANNER;
-  if (effect == "comet")
-    return FX_MODE_COMET;
-  if (effect == "fireworks")
-    return FX_MODE_FIREWORKS;
-  if (effect == "fireworks random")
-    return FX_MODE_FIREWORKS_RANDOM;
-  if (effect == "merry christmas")
-    return FX_MODE_MERRY_CHRISTMAS;
-  if (effect == "fire flicker")
-    return FX_MODE_FIRE_FLICKER;
-  if (effect == "fire flicker soft")
-    return FX_MODE_FIRE_FLICKER_SOFT;
-  if (effect == "fire flicker intense")
-    return FX_MODE_FIRE_FLICKER_INTENSE;
-  if (effect == "circus combustus")
-    return FX_MODE_CIRCUS_COMBUSTUS;
-  if (effect == "halloween")
-    return FX_MODE_HALLOWEEN;
-  if (effect == "bicolor chase")
-    return FX_MODE_BICOLOR_CHASE;
-  if (effect == "tricolor chase")
-    return FX_MODE_TRICOLOR_CHASE;
-  if (effect == "icu")
-    return FX_MODE_ICU;
-  if (effect == "custom")
-    return FX_MODE_CUSTOM;
+void setEffect(const char *effect) {
+  Serial.println(effect);
+
+  if (effect == "static") {
+    ws2812fx.setMode(FX_MODE_STATIC);
+  }
+  if (effect == "blink") {
+    ws2812fx.setMode(FX_MODE_BLINK);
+  }
+  if (effect == "breath") {
+    ws2812fx.setMode(FX_MODE_BREATH);
+  }
+  if (effect == "color wipe") {
+    ws2812fx.setMode(FX_MODE_COLOR_WIPE);
+  }
+  if (effect == "color wipe inverted") {
+    ws2812fx.setMode(FX_MODE_COLOR_WIPE_INV);
+  }
+  if (effect == "color wipe reverse") {
+    ws2812fx.setMode(FX_MODE_COLOR_WIPE_REV);
+  }
+  if (effect == "color wipe reverse inverted") {
+    ws2812fx.setMode(FX_MODE_COLOR_WIPE_REV_INV);
+  }
+  if (effect == "color wipe random") {
+    ws2812fx.setMode(FX_MODE_COLOR_WIPE_RANDOM);
+  }
+  if (effect == "random color") {
+    ws2812fx.setMode(FX_MODE_RANDOM_COLOR);
+  }
+  if (effect == "single dynamic") {
+    ws2812fx.setMode(FX_MODE_SINGLE_DYNAMIC);
+  }
+  if (effect == "multi dynamic") {
+    ws2812fx.setMode(FX_MODE_MULTI_DYNAMIC);
+  }
+  if (effect == "rainbow") {
+    ws2812fx.setMode(FX_MODE_RAINBOW);
+  }
+  if (effect == "rainbow cycle") {
+    ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
+  }
+  if (effect == "scan") {
+    ws2812fx.setMode(FX_MODE_SCAN);
+  }
+  if (effect == "dual scan") {
+    ws2812fx.setMode(FX_MODE_DUAL_SCAN);
+  }
+  if (effect == "fade") {
+    ws2812fx.setMode(FX_MODE_FADE);
+  }
+  if (effect == "theater chase") {
+    ws2812fx.setMode(FX_MODE_THEATER_CHASE);
+  }
+  if (effect == "theater chase rainbow") {
+    ws2812fx.setMode(FX_MODE_THEATER_CHASE_RAINBOW);
+  }
+  if (effect == "running lights") {
+    ws2812fx.setMode(FX_MODE_RUNNING_LIGHTS);
+  }
+  if (effect == "twinkle") {
+    ws2812fx.setMode(FX_MODE_TWINKLE);
+  }
+  if (effect == "twinkle random") {
+    ws2812fx.setMode(FX_MODE_TWINKLE_RANDOM);
+  }
+  if (effect == "twinkle fade") {
+    ws2812fx.setMode(FX_MODE_TWINKLE_FADE);
+  }
+  if (effect == "twinkle fade random") {
+    ws2812fx.setMode(FX_MODE_TWINKLE_FADE_RANDOM);
+  }
+  if (effect == "sparkle") {
+    ws2812fx.setMode(FX_MODE_SPARKLE);
+  }
+  if (effect == "flash sparkle") {
+    ws2812fx.setMode(FX_MODE_FLASH_SPARKLE);
+  }
+  if (effect == "hyper sparkle") {
+    ws2812fx.setMode(FX_MODE_HYPER_SPARKLE);
+  }
+  if (effect == "strobe") {
+    ws2812fx.setMode(FX_MODE_STROBE);
+  }
+  if (effect == "strobe rainbow") {
+    ws2812fx.setMode(FX_MODE_STROBE_RAINBOW);
+  }
+  if (effect == "multi strobe") {
+    ws2812fx.setMode(FX_MODE_MULTI_STROBE);
+  }
+  if (effect == "blink rainbow") {
+    ws2812fx.setMode(FX_MODE_BLINK_RAINBOW);
+  }
+  if (effect == "chase white") {
+    ws2812fx.setMode(FX_MODE_CHASE_WHITE);
+  }
+  if (effect == "chase_color") {
+    ws2812fx.setMode(FX_MODE_CHASE_COLOR);
+  }
+  if (effect == "chase random") {
+    ws2812fx.setMode(FX_MODE_CHASE_RANDOM);
+  }
+  if (effect == "chase rainbow") {
+    ws2812fx.setMode(FX_MODE_CHASE_RAINBOW);
+  }
+  if (effect == "chase flash") {
+    ws2812fx.setMode(FX_MODE_CHASE_FLASH);
+  }
+  if (effect == "chase random") {
+    ws2812fx.setMode(FX_MODE_CHASE_FLASH_RANDOM);
+  }
+  if (effect == "chase rainbow white") {
+    ws2812fx.setMode(FX_MODE_CHASE_RAINBOW_WHITE);
+  }
+  if (effect == "chase blackout") {
+    ws2812fx.setMode(FX_MODE_CHASE_BLACKOUT);
+  }
+  if (effect == "chase blackout rainbow") {
+    ws2812fx.setMode(FX_MODE_CHASE_BLACKOUT_RAINBOW);
+  }
+  if (effect == "color sweep random") {
+    ws2812fx.setMode(FX_MODE_COLOR_SWEEP_RANDOM);
+  }
+  if (effect == "running color") {
+    ws2812fx.setMode(FX_MODE_RUNNING_COLOR);
+  }
+  if (effect == "running red blue") {
+    ws2812fx.setMode(FX_MODE_RUNNING_RED_BLUE);
+  }
+  if (effect == "runnning random") {
+    ws2812fx.setMode(FX_MODE_RUNNING_RANDOM);
+  }
+  if (effect == "larson scanner") {
+    ws2812fx.setMode(FX_MODE_LARSON_SCANNER);
+  }
+  if (effect == "comet") {
+    ws2812fx.setMode(FX_MODE_COMET);
+  }
+  if (effect == "fireworks") {
+    ws2812fx.setMode(FX_MODE_FIREWORKS);
+  }
+  if (effect == "fireworks random") {
+    ws2812fx.setMode(FX_MODE_FIREWORKS_RANDOM);
+  }
+  if (effect == "merry christmas") {
+    ws2812fx.setMode(FX_MODE_MERRY_CHRISTMAS);
+  }
+  if (effect == "fire flicker") {
+    ws2812fx.setMode(FX_MODE_FIRE_FLICKER);
+  }
+  if (effect == "fire flicker soft") {
+    ws2812fx.setMode(FX_MODE_FIRE_FLICKER_SOFT);
+  }
+  if (effect == "fire flicker intense") {
+    ws2812fx.setMode(FX_MODE_FIRE_FLICKER_INTENSE);
+  }
+  if (effect == "circus combustus") {
+    ws2812fx.setMode(FX_MODE_CIRCUS_COMBUSTUS);
+  }
+  if (effect == "halloween") {
+    ws2812fx.setMode(FX_MODE_HALLOWEEN);
+  }
+  if (effect == "bicolor chase") {
+    ws2812fx.setMode(FX_MODE_BICOLOR_CHASE);
+  }
+  if (effect == "tricolor chase") {
+    ws2812fx.setMode(FX_MODE_TRICOLOR_CHASE);
+  }
+  if (effect == "icu") {
+    ws2812fx.setMode(FX_MODE_ICU);
+  }
+  if (effect == "custom") {
+    ws2812fx.setMode(FX_MODE_CUSTOM);
+  }
+
+  Serial.println(ws2812fx.getModeName(ws2812fx.getMode()));
 }
 
 void setup_wifi() {
@@ -227,9 +271,9 @@ void sendState() {
 
   root["state"] = (stateOn) ? on_cmd : off_cmd;
   JsonObject &color = root.createNestedObject("color");
-  color["r"] = realRed;
-  color["g"] = realGreen;
-  color["b"] = realBlue;
+  color["r"] = red;
+  color["g"] = green;
+  color["b"] = blue;
 
   root["brightness"] = brightness;
   root["speed"] = speed;
@@ -267,16 +311,11 @@ bool processJson(char *message) {
     }
   }
 
-  if (root.containsKey("speed")) {
-    speed = root["speed"];
-    ws2812fx.setSpeed(speed * 100);
-  }
-
   if (root.containsKey("color")) {
-    realRed = root["color"]["r"];
-    realGreen = root["color"]["g"];
-    realBlue = root["color"]["b"];
-    ws2812fx.setColor(rgbToHex(realRed, realGreen, realBlue));
+    red = root["color"]["r"];
+    green = root["color"]["g"];
+    blue = root["color"]["b"];
+    ws2812fx.setColor(rgbToHex(red, green, blue));
   }
 
   if (root.containsKey("brightness")) {
@@ -287,24 +326,15 @@ bool processJson(char *message) {
   if (root.containsKey("effect")) {
     effectString = root["effect"];
     effect = effectString;
-    effectNumber = getEffect(effectString);
-    ws2812fx.stop();
-    ws2812fx.setMode(effectNumber);
-    ws2812fx.start();
+    setEffect(effectString);
+  }
+
+  if (root.containsKey("speed")) {
+    speed = root["speed"];
+    ws2812fx.setSpeed(speed * 100);
   }
 
   return true;
-}
-
-void setOff() {
-  stateOn = false;
-  previousRed, previousGreen, previousBlue = 0;
-  Serial.println("LED: OFF");
-}
-
-void setOn() {
-  stateOn = true;
-  Serial.println("LED: ON");
 }
 
 void callback(char *topic, byte *payload, unsigned int length) {
@@ -320,44 +350,8 @@ void callback(char *topic, byte *payload, unsigned int length) {
   message[length] = '\0';
   Serial.println(message);
 
-  previousEffect = effect;
-
-  if (!processJson(message)) {
+  if (!processJson(message))
     return;
-  }
-
-  previousRed = red;
-  previousGreen = green;
-  previousBlue = blue;
-
-  Serial.print("realRed: ");
-  Serial.println(realRed);
-  Serial.print("realGreen: ");
-  Serial.println(realGreen);
-  Serial.print("realBlue: ");
-  Serial.println(realBlue);
-  Serial.print("brightness: ");
-  Serial.println(brightness);
-  Serial.print("effect: ");
-  Serial.println(effect);
-  Serial.print("effectNumber: ");
-  Serial.println(effectNumber);
-
-  if (stateOn) {
-    red = map(realRed, 0, 255, 0, brightness);
-    green = map(realGreen, 0, 255, 0, brightness);
-    blue = map(realBlue, 0, 255, 0, brightness);
-  } else {
-    red = 0;
-    green = 0;
-    blue = 0;
-  }
-
-  if (stateOn) {
-    setOn();
-  } else {
-    setOff(); // NOTE: Will change transitionDone
-  }
 
   sendState();
 }
@@ -400,7 +394,7 @@ void setup() {
   // End of trinket special code
   ws2812fx.init();
   ws2812fx.setBrightness(defaultBrightness);
-  ws2812fx.setSpeed(200);
+  ws2812fx.setSpeed(speed);
   ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
   ws2812fx.start();
   stateOn = true;
@@ -461,4 +455,6 @@ void loop() {
   ArduinoOTA.handle(); // Check OTA Firmware Updates
 
   ws2812fx.service();
+
+  // Serial.println(ws2812fx.getModeName(ws2812fx.getMode()));
 }
