@@ -250,7 +250,7 @@ void reconnect() {
       sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
       client.subscribe(combinedArray);
 
-      setOff();
+      // setOff();
       sendState();
     } else {
       Serial.print("failed, rc=");
@@ -279,6 +279,7 @@ void setup() {
   ws2812fx.setSpeed(200);
   ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
   ws2812fx.start();
+  stateOn = true;
 
   setup_wifi();
 
