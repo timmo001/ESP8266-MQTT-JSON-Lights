@@ -4,7 +4,7 @@ ESP8266 MQTT JSON Lights. Supports flash, fade, transitions, speed, effects, and
 ## Setup
 See https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md for initial hardware setup.
 
-- Rename src/setup-template.h to src/setup.h and add your network, MQTT and lighting setup information. Take note of the 'deviceName' you set. You will need this later to send MQTT messages to
+- Rename `src/setup-template.h` to src/setup.h and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
 - Using Atom or VS Code, install Platform IO https://platformio.org/platformio-ide
 - Once setup, install the esp8266 embedded platform
 - Install library dependencies:
@@ -12,7 +12,7 @@ See https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/REA
   - ArduinoJson
   - PubSubClient
 - Build the project (Ctrl+Alt+B) and check for any errors
-- Upload to your board of choice (Ctrl+Alt+U). This project was created specifically for the NodeMCU but can be configured to work with another WiFi board with some tinkering.
+- Upload to your board of choice (Ctrl+Alt+U). This project was created specifically for the `NodeMCU` but can be configured to work with another WiFi board with some tinkering.
 
 ## Example Home Assistant Configuration
 ```yaml
@@ -86,3 +86,7 @@ light:
   optimistic: false
   qos: 0
 ```
+
+> Note that `speed` is a new feature I am working on and will not work on the current version of Home Assistant. This will be a new slider above the color wheel to control the speed.
+
+> The speed of the lights will be slower the higher the slider value and faster the lower the value. Treat this more as a delay slider than a speed slider.
