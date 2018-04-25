@@ -99,7 +99,7 @@ light:
     "g": 100,
     "b": 100
   },
-  "effect": "static"
+  "effect": "static",
   "state": "ON"
 }
 ```
