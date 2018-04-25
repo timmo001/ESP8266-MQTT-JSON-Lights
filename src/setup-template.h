@@ -1,9 +1,6 @@
 /* Add your keys & rename this file to setup.h */
 using namespace std;
 
-#ifndef _AUTH_DETAILS
-#define _AUTH_DETAILS
-
 #define WIFI_SSID "SSID"
 #define WIFI_PASSWORD "PASSWORD"
 
@@ -20,17 +17,3 @@ char* MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 #define LED_COUNT 12
 
 char* deviceName = "led";
-
-byte defaultBrightness = 209;    // 80%
-String effect = "rainbow cycle"; // default effect ("solid", "rainbow cycle" etc.)
-int speed = 50;                  // default speed (1-150)
-
-void setup_config() {
-  Serial.println();
-  Serial.print("ESP8266 Chip id: ");
-  Serial.println(ESP.getChipId());
-  Serial.print("Device Name: ");
-  Serial.println(deviceName);
-}
-
-#endif
