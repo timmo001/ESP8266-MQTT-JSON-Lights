@@ -12,4 +12,5 @@ install:
     - platformio update
 
 script:
+    - mv src/setup-template.h src/setup.h
     - platformio run
