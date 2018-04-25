@@ -8,9 +8,9 @@ See https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/REA
 - Using Atom or VS Code, install Platform IO https://platformio.org/platformio-ide
 - Once setup, install the esp8266 embedded platform
 - Install library dependencies:
-    - Adafruit NeoPixel
-    - ArduinoJson
-    - PubSubClient
+  - Adafruit NeoPixel
+  - ArduinoJson
+  - PubSubClient
 - Build the project (Ctrl+Alt+B) and check for any errors
 - Upload to your board of choice (Ctrl+Alt+U). This project was created specifically for the NodeMCU but can be configured to work with another WiFi board with some tinkering.
 
