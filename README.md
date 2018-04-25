@@ -1,6 +1,8 @@
 # ESP8266-MQTT-JSON-Lights
 ESP8266 MQTT JSON Lights. Supports brightness, effects, speed, and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
+[![Build Status](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights.svg?branch=master)](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights)
+
 ## Setup
 See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md) for initial hardware setup.
 
@@ -89,3 +91,17 @@ light:
 > Note that `speed` is a new feature I am working on and will not work on the current version of Home Assistant. This will be a new slider above the color wheel to control the speed. You can add this however and it will magically work if/when the support is added.
 
 > The speed of the lights will be slower the higher the slider value and faster the lower the value. Treat this more as a delay slider than a speed slider.
+
+## Sample MQTT Payload
+```json
+{
+  "brightness": 120,
+  "color": {
+    "r": 255,
+    "g": 100,
+    "b": 100
+  },
+  "effect": "static",
+  "state": "ON"
+}
+```
