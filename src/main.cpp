@@ -18,7 +18,7 @@
       "g": 100,
       "b": 100
     },
-    "flash": 2,
+    "effect": "static"
     "state": "ON"
   }
 */
@@ -60,176 +60,118 @@ unsigned long rgbToHex(int r, int g, int b) {
 }
 
 void setEffect(String effect) {
-  Serial.println(effect);
-
-  if (effect == "static") {
+  if (effect == "static")
     ws2812fx.setMode(FX_MODE_STATIC);
-  }
-  if (effect == "blink") {
+  if (effect == "blink")
     ws2812fx.setMode(FX_MODE_BLINK);
-  }
-  if (effect == "breath") {
+  if (effect == "breath")
     ws2812fx.setMode(FX_MODE_BREATH);
-  }
-  if (effect == "color wipe") {
+  if (effect == "color wipe")
     ws2812fx.setMode(FX_MODE_COLOR_WIPE);
-  }
-  if (effect == "color wipe inverted") {
+  if (effect == "color wipe inverted")
     ws2812fx.setMode(FX_MODE_COLOR_WIPE_INV);
-  }
-  if (effect == "color wipe reverse") {
+  if (effect == "color wipe reverse")
     ws2812fx.setMode(FX_MODE_COLOR_WIPE_REV);
-  }
-  if (effect == "color wipe reverse inverted") {
+  if (effect == "color wipe reverse inverted")
     ws2812fx.setMode(FX_MODE_COLOR_WIPE_REV_INV);
-  }
-  if (effect == "color wipe random") {
+  if (effect == "color wipe random")
     ws2812fx.setMode(FX_MODE_COLOR_WIPE_RANDOM);
-  }
-  if (effect == "random color") {
+  if (effect == "random color")
     ws2812fx.setMode(FX_MODE_RANDOM_COLOR);
-  }
-  if (effect == "single dynamic") {
+  if (effect == "single dynamic")
     ws2812fx.setMode(FX_MODE_SINGLE_DYNAMIC);
-  }
-  if (effect == "multi dynamic") {
+  if (effect == "multi dynamic")
     ws2812fx.setMode(FX_MODE_MULTI_DYNAMIC);
-  }
-  if (effect == "rainbow") {
+  if (effect == "rainbow")
     ws2812fx.setMode(FX_MODE_RAINBOW);
-  }
-  if (effect == "rainbow cycle") {
+  if (effect == "rainbow cycle")
     ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
-  }
-  if (effect == "scan") {
+  if (effect == "scan")
     ws2812fx.setMode(FX_MODE_SCAN);
-  }
-  if (effect == "dual scan") {
+  if (effect == "dual scan")
     ws2812fx.setMode(FX_MODE_DUAL_SCAN);
-  }
-  if (effect == "fade") {
+  if (effect == "fade")
     ws2812fx.setMode(FX_MODE_FADE);
-  }
-  if (effect == "theater chase") {
+  if (effect == "theater chase")
     ws2812fx.setMode(FX_MODE_THEATER_CHASE);
-  }
-  if (effect == "theater chase rainbow") {
+  if (effect == "theater chase rainbow")
     ws2812fx.setMode(FX_MODE_THEATER_CHASE_RAINBOW);
-  }
-  if (effect == "running lights") {
+  if (effect == "running lights")
     ws2812fx.setMode(FX_MODE_RUNNING_LIGHTS);
-  }
-  if (effect == "twinkle") {
+  if (effect == "twinkle")
     ws2812fx.setMode(FX_MODE_TWINKLE);
-  }
-  if (effect == "twinkle random") {
+  if (effect == "twinkle random")
     ws2812fx.setMode(FX_MODE_TWINKLE_RANDOM);
-  }
-  if (effect == "twinkle fade") {
+  if (effect == "twinkle fade")
     ws2812fx.setMode(FX_MODE_TWINKLE_FADE);
-  }
-  if (effect == "twinkle fade random") {
+  if (effect == "twinkle fade random")
     ws2812fx.setMode(FX_MODE_TWINKLE_FADE_RANDOM);
-  }
-  if (effect == "sparkle") {
+  if (effect == "sparkle")
     ws2812fx.setMode(FX_MODE_SPARKLE);
-  }
-  if (effect == "flash sparkle") {
+  if (effect == "flash sparkle")
     ws2812fx.setMode(FX_MODE_FLASH_SPARKLE);
-  }
-  if (effect == "hyper sparkle") {
+  if (effect == "hyper sparkle")
     ws2812fx.setMode(FX_MODE_HYPER_SPARKLE);
-  }
-  if (effect == "strobe") {
+  if (effect == "strobe")
     ws2812fx.setMode(FX_MODE_STROBE);
-  }
-  if (effect == "strobe rainbow") {
+  if (effect == "strobe rainbow")
     ws2812fx.setMode(FX_MODE_STROBE_RAINBOW);
-  }
-  if (effect == "multi strobe") {
+  if (effect == "multi strobe")
     ws2812fx.setMode(FX_MODE_MULTI_STROBE);
-  }
-  if (effect == "blink rainbow") {
+  if (effect == "blink rainbow")
     ws2812fx.setMode(FX_MODE_BLINK_RAINBOW);
-  }
-  if (effect == "chase white") {
+  if (effect == "chase white")
     ws2812fx.setMode(FX_MODE_CHASE_WHITE);
-  }
-  if (effect == "chase_color") {
+  if (effect == "chase_color")
     ws2812fx.setMode(FX_MODE_CHASE_COLOR);
-  }
-  if (effect == "chase random") {
+  if (effect == "chase random")
     ws2812fx.setMode(FX_MODE_CHASE_RANDOM);
-  }
-  if (effect == "chase rainbow") {
+  if (effect == "chase rainbow")
     ws2812fx.setMode(FX_MODE_CHASE_RAINBOW);
-  }
-  if (effect == "chase flash") {
+  if (effect == "chase flash")
     ws2812fx.setMode(FX_MODE_CHASE_FLASH);
-  }
-  if (effect == "chase random") {
+  if (effect == "chase random")
     ws2812fx.setMode(FX_MODE_CHASE_FLASH_RANDOM);
-  }
-  if (effect == "chase rainbow white") {
+  if (effect == "chase rainbow white")
     ws2812fx.setMode(FX_MODE_CHASE_RAINBOW_WHITE);
-  }
-  if (effect == "chase blackout") {
+  if (effect == "chase blackout")
     ws2812fx.setMode(FX_MODE_CHASE_BLACKOUT);
-  }
-  if (effect == "chase blackout rainbow") {
+  if (effect == "chase blackout rainbow")
     ws2812fx.setMode(FX_MODE_CHASE_BLACKOUT_RAINBOW);
-  }
-  if (effect == "color sweep random") {
+  if (effect == "color sweep random")
     ws2812fx.setMode(FX_MODE_COLOR_SWEEP_RANDOM);
-  }
-  if (effect == "running color") {
+  if (effect == "running color")
     ws2812fx.setMode(FX_MODE_RUNNING_COLOR);
-  }
-  if (effect == "running red blue") {
+  if (effect == "running red blue")
     ws2812fx.setMode(FX_MODE_RUNNING_RED_BLUE);
-  }
-  if (effect == "running random") {
+  if (effect == "running random")
     ws2812fx.setMode(FX_MODE_RUNNING_RANDOM);
-  }
-  if (effect == "larson scanner") {
+  if (effect == "larson scanner")
     ws2812fx.setMode(FX_MODE_LARSON_SCANNER);
-  }
-  if (effect == "comet") {
+  if (effect == "comet")
     ws2812fx.setMode(FX_MODE_COMET);
-  }
-  if (effect == "fireworks") {
+  if (effect == "fireworks")
     ws2812fx.setMode(FX_MODE_FIREWORKS);
-  }
-  if (effect == "fireworks random") {
+  if (effect == "fireworks random")
     ws2812fx.setMode(FX_MODE_FIREWORKS_RANDOM);
-  }
-  if (effect == "merry christmas") {
+  if (effect == "merry christmas")
     ws2812fx.setMode(FX_MODE_MERRY_CHRISTMAS);
-  }
-  if (effect == "fire flicker") {
+  if (effect == "fire flicker")
     ws2812fx.setMode(FX_MODE_FIRE_FLICKER);
-  }
-  if (effect == "fire flicker soft") {
+  if (effect == "fire flicker soft")
     ws2812fx.setMode(FX_MODE_FIRE_FLICKER_SOFT);
-  }
-  if (effect == "fire flicker intense") {
+  if (effect == "fire flicker intense")
     ws2812fx.setMode(FX_MODE_FIRE_FLICKER_INTENSE);
-  }
-  if (effect == "circus combustus") {
+  if (effect == "circus combustus")
     ws2812fx.setMode(FX_MODE_CIRCUS_COMBUSTUS);
-  }
-  if (effect == "halloween") {
+  if (effect == "halloween")
     ws2812fx.setMode(FX_MODE_HALLOWEEN);
-  }
-  if (effect == "bicolor chase") {
+  if (effect == "bicolor chase")
     ws2812fx.setMode(FX_MODE_BICOLOR_CHASE);
-  }
-  if (effect == "tricolor chase") {
+  if (effect == "tricolor chase")
     ws2812fx.setMode(FX_MODE_TRICOLOR_CHASE);
-  }
-  if (effect == "icu") {
+  if (effect == "icu")
     ws2812fx.setMode(FX_MODE_ICU);
-  }
 }
 
 void setup_wifi() {
@@ -360,7 +302,6 @@ void reconnect() {
       sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
       client.subscribe(combinedArray);
 
-      // setOff();
       sendState();
     } else {
       Serial.print("failed, rc=");
@@ -375,13 +316,10 @@ void reconnect() {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);   // Initialize the LED_BUILTIN pin as an output (So it doesnt float as a LED is on this pin)
   digitalWrite(LED_BUILTIN, LOW); // Turn the status LED on
-  // pinMode(DATA_LED_PIN_RELAY, OUTPUT);    // Initialize the P-Channel MOSFET for the LED strip
-  // digitalWrite(DATA_LED_PIN_RELAY, LOW);  // Turn the LED strip on
 
   Serial.begin(115200);
 
   delay(500); // Wait for Leds to init and Cap to charge
-  // setup_config();
 
   // End of trinket special code
   ws2812fx.init();
@@ -402,12 +340,8 @@ void setup() {
   ArduinoOTA.setHostname(deviceName);                // Hostname defaults to esp8266-[ChipID]
   ArduinoOTA.setPassword((const char *)OTApassword); // No authentication by default
 
-  ArduinoOTA.onStart([]() {
-    Serial.println("Starting");
-  });
-  ArduinoOTA.onEnd([]() {
-    Serial.println("\nEnd");
-  });
+  ArduinoOTA.onStart([]() { Serial.println("Starting"); });
+  ArduinoOTA.onEnd([]() { Serial.println("\nEnd"); });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
     Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
   });
@@ -429,6 +363,7 @@ void setup() {
   Serial.println("Ready");
 
   // OK we are connected
+  digitalWrite(LED_BUILTIN, HIGH); // Turn the status LED off
 }
 
 void loop() {
