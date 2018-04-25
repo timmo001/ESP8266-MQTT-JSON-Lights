@@ -1,5 +1,5 @@
 # ESP8266-MQTT-JSON-Lights
-ESP8266 MQTT JSON Lights. Supports flash, fade, speed, effects, and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
+ESP8266 MQTT JSON Lights. Supports brightness, effects, speed, and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Setup
 See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md) for initial hardware setup.
@@ -80,7 +80,6 @@ light:
     - tricolor chase
     - icu
   brightness: true
-  flash: true
   rgb: true
   speed: true
   optimistic: false
