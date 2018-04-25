@@ -89,3 +89,17 @@ light:
 > Note that `speed` is a new feature I am working on and will not work on the current version of Home Assistant. This will be a new slider above the color wheel to control the speed. You can add this however and it will magically work if/when the support is added.
 
 > The speed of the lights will be slower the higher the slider value and faster the lower the value. Treat this more as a delay slider than a speed slider.
+
+## Sample MQTT Payload
+```json
+{
+  "brightness": 120,
+  "color": {
+    "r": 255,
+    "g": 100,
+    "b": 100
+  },
+  "effect": "static"
+  "state": "ON"
+}
+```
