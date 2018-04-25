@@ -1,11 +1,11 @@
 # ESP8266-MQTT-JSON-Lights
-ESP8266 MQTT JSON Lights. Supports flash, fade, transitions, speed, effects, and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
+ESP8266 MQTT JSON Lights. Supports flash, fade, speed, effects, and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Setup
-See https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md for initial hardware setup.
+See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md) for initial hardware setup.
 
 - Rename `src/setup-template.h` to src/setup.h and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
-- Using Atom or VS Code, install Platform IO https://platformio.org/platformio-ide
+- Using Atom or VS Code, install [Platform IO](https://platformio.org/platformio-ide)
 - Once setup, install the esp8266 embedded platform
 - Install library dependencies:
   - Adafruit NeoPixel
