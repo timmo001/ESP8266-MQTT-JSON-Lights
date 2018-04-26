@@ -79,14 +79,14 @@ light:
     - bicolor chase
     - tricolor chase
     - icu
+  effect_speed: true
   brightness: true
   rgb: true
-  speed: true
   optimistic: false
   qos: 0
 ```
 
-> Note that `speed` is a new feature I am working on and will not work on the current version of Home Assistant. This will be a new slider above the color wheel to control the speed. You can add this however and it will magically work if/when the support is added.
+> Note that `effect_speed` is a new feature I am working on and will not work on the current version of Home Assistant. This will be a new slider above the color wheel to control the effects's speed. You can add this however and it will magically work if/when the support is added.
 
 > The speed of the lights will be slower the higher the slider value and faster the lower the value. Treat this more as a delay slider than a speed slider.
 
