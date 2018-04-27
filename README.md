@@ -97,7 +97,7 @@ light:
     "b": 100
   },
   "effect": "rainbow cycle",
-  "speed": 60
+  "speed": 60,
   "state": "ON"
 }
 ```
