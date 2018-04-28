@@ -7,7 +7,7 @@ ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. B
 
 > This is not a comprehesive list by any means. Just devices I / others have tested are working. Feel free to try uploading to your own device and add a pull request if your device works also.
 
-## Setup
+## Hardware Setup
 See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md) for initial hardware setup.
 
 My version of is a bit more simple and only requires a 5v power supply with high enough amperage to drive:
@@ -17,6 +17,7 @@ My version of is a bit more simple and only requires a 5v power supply with high
 ### 5v PSU Neopixel WS2811 String/Strip Version
 ![5v PSU Neopixel WS2811 String/Strip Version](diagrams/neopixel_strip_string_ws2811_5v_psu.svg)
 
+## Software Setup
 - Rename `src/setup-template.h` to `src/setup.h` and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
 - Using Atom or VS Code, install [Platform IO](https://platformio.org/platformio-ide)
 - Once setup, install the `esp8266` embedded platform
