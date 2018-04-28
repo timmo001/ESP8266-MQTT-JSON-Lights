@@ -3,7 +3,7 @@ ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. B
 
 ## Known working devices
 - WS2812 5v LED Ring
-- WS2811 5v LED String
+- WS2811 5v LED String (Required `NEO_GRB` to be changed to `NEO_RGB` on line 56 in `main.cpp` for my set of lights)
 
 > This is not a comprehesive list by any means. Just devices I / others have tested are working. Feel free to try uploading to your own device and add a pull request if your device works also.
 
