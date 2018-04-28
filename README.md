@@ -24,13 +24,13 @@ My version of is a bit more simple and only requires a 5v power supply with high
 > You can drive over 100 LEDs without issues on this method. You may however have to add a wire from the PSU +5v to sections of the wire if you experience dimming along the string/strip.
 
 ## Software Setup
-- Rename `src/setup-template.h` to `src/setup.h` and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
 - Using Atom or VS Code, install [Platform IO](https://platformio.org/platformio-ide)
 - Once setup, install the `esp8266` embedded platform
 - Install library dependencies:
   - Adafruit NeoPixel
   - ArduinoJson
   - PubSubClient
+- Rename `src/setup-template.h` to `src/setup.h` and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
 - Build the project (Ctrl+Alt+B) and check for any errors
 - Upload to your board of choice (Ctrl+Alt+U). This project was created specifically for the `NodeMCU` but can be configured to work with another WiFi board with some tinkering.
 
