@@ -8,9 +8,7 @@ ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. B
 > This is not a comprehesive list by any means. Just devices I / others have tested are working. Feel free to try uploading to your own device and add a pull request if your device works also.
 
 ## Hardware Setup
-See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs/blob/master/README.md) for initial hardware setup.
-
-My version of is a bit more simple and only requires a 5v power supply with high enough amperage to drive:
+Hardware is your choice of course. My examples however only requires a 5v power supply (which could just be USB) with high enough amperage to drive the LEDs.
 
 ### USB Neopixel WS2812 Ring/Strip Version
 ![USB Neopixel WS2812 Ring Version](diagrams/neopixel_ring_ws2812_5v_usb.svg)
