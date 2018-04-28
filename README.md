@@ -12,10 +12,15 @@ See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Dig
 
 My version of is a bit more simple and only requires a 5v power supply with high enough amperage to drive:
 
-### USB Neopixel WS2812 Ring Version
+### USB Neopixel WS2812 Ring/Strip Version
 ![USB Neopixel WS2812 Ring Version](diagrams/neopixel_ring_ws2812_5v_usb.svg)
+> A 5V power supply may be required if your lights draw too much current.
+> If this happens or you are planning to use more than 30 leds or so, use the below method.
+
 ### 5v PSU Neopixel WS2811 String/Strip Version
 ![5v PSU Neopixel WS2811 String/Strip Version](diagrams/neopixel_strip_string_ws2811_5v_psu.svg)
+> The diode / zenner diode isn't required, but I added it to avoid any reverse current issues.
+> You can drive over 100 LEDs without issues on this method. You may however have to add a wire from the PSU +5v to sections of the wire if you experience dimming along the string/strip.
 
 ## Software Setup
 - Rename `src/setup-template.h` to `src/setup.h` and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
