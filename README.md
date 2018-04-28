@@ -1,5 +1,5 @@
 # ESP8266-MQTT-JSON-Lights [![Build Status](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights.svg?branch=master)](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights)
-ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Based on https://github.com/DotNetDann/ESP8266-MQTT-JSON-SK6812RGBW-HomeAssistant and https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
+ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Based on https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Known working devices
 - WS2812 5v LED Ring
