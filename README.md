@@ -24,7 +24,7 @@ See [bruhautomation's guide](https://github.com/bruhautomation/ESP-MQTT-JSON-Dig
 ```yaml
 light:
   platform: mqtt_json
-  name: 'WS2812 Lights'
+  name: 'LED Lights'
   state_topic: 'light/led'
   command_topic: 'light/led/set'
   effect: true
@@ -89,6 +89,27 @@ light:
   rgb: true
   optimistic: false
   qos: 0
+
+input_number:
+  led_effect_speed:
+    name: 'LED Effect Speed'
+    initial: 50 # This is the default speed
+    mode: slider
+    min: 10  # ######################################
+    max: 150 # Feel Free to adjust these as you like
+    step: 10 # ######################################
+
+automation:
+  - action:
+      - alias: Set LED Lights Effect Speed
+        service: mqtt.publish
+        data_template:
+          topic: light/led/set
+          payload: '{"speed":{{ trigger.to_state.state | int }}}'
+    alias: LED Light Effect Speed
+    trigger:
+      - platform: state
+        entity_id: input_number.led_effect_speed
 ```
 
 > The speed of the lights will be slower the higher the slider value and faster the lower the value. Treat this more as a delay slider than a speed slider.
@@ -99,8 +120,8 @@ light:
   "brightness": 120,
   "color": {
     "r": 255,
-    "g": 100,
-    "b": 100
+    "g": 255,
+    "b": 255
   },
   "effect": "rainbow cycle",
   "speed": 60,
