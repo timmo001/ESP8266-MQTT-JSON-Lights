@@ -20,6 +20,7 @@ My version of is a bit more simple and only requires a 5v power supply with high
 ### 5v PSU Neopixel WS2811 String/Strip Version
 ![5v PSU Neopixel WS2811 String/Strip Version](diagrams/neopixel_strip_string_ws2811_5v_psu.svg)
 > The diode / zenner diode isn't required, but I added it to avoid any reverse current issues.
+
 > You can drive over 100 LEDs without issues on this method. You may however have to add a wire from the PSU +5v to sections of the wire if you experience dimming along the string/strip.
 
 ## Software Setup
