@@ -2,7 +2,7 @@
 ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Based on https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Showcase Video
-[![Showcase Video](http://img.youtube.com/vi/2Tk4oj2eVj8/0.jpg)](https://youtu.be/2Tk4oj2eVj8)
+[![Showcase Video](http://img.youtube.com/vi/gas0h9pCgSs/0.jpg)](https://youtu.be/gas0h9pCgSs)
 
 ## Known working devices
 - WS2812 5v LED Ring
