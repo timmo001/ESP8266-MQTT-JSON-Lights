@@ -29,11 +29,12 @@ Hardware is your choice of course. My examples however only requires a 5v power 
 - Once setup, install the `esp8266` embedded platform
 - Rename `src/setup-template.h` to `src/setup.h` and add your network, MQTT and lighting setup information. Take note of the `deviceName` you set. You will need this later to send MQTT messages.
 - Build the project (Ctrl+Alt+B) and check for any errors
+
   > If the build produces an error referencing dependencies, You will need to manually install these libraries:
-  - Adafruit NeoPixel
-  - ArduinoJson
-  - PubSubClient
-  - WS2812FX
+    - Adafruit NeoPixel
+    - ArduinoJson
+    - PubSubClient
+    - WS2812FX
 - Upload to your board of choice (Ctrl+Alt+U). This project was created specifically for the `NodeMCU` but can be configured to work with another WiFi board with some tinkering.
 
 ## Example Home Assistant Configuration
