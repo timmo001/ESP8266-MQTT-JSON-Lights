@@ -77,7 +77,7 @@ light:
     - multi strobe
     - blink rainbow
     - chase white
-    - chase_color
+    - chase color
     - chase random
     - chase rainbow
     - chase flash
