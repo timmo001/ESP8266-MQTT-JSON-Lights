@@ -1,27 +1,3 @@
-/*
-  To use this code you will need the following dependancies:
-
-  - Support for the ESP8266 boards.
-        - You can add it to the board manager by going to File -> Preference and pasting http://arduino.esp8266.com/stable/package_esp8266com_index.json into the Additional Board Managers URL field.
-        - Next, download the ESP8266 dependancies by going to Tools -> Board -> Board Manager and searching for ESP8266 and installing it.
-
-  - You will also need to download the follow libraries by going to Sketch -> Include Libraries -> Manage Libraries
-      - Adafruit NeoPixel
-      - PubSubClient
-      - ArduinoJSON
-
-  Sample MQTT Payload:
-  {
-    "brightness": 120,
-    "color": {
-      "r": 255,
-      "g": 100,
-      "b": 100
-    },
-    "effect": "static",
-    "state": "ON"
-  }
-*/
 using namespace std;
 
 #include "setup.h"
@@ -122,7 +98,7 @@ void setEffect(String effect) {
     ws2812fx.setMode(FX_MODE_BLINK_RAINBOW);
   if (effect == "chase white")
     ws2812fx.setMode(FX_MODE_CHASE_WHITE);
-  if (effect == "chase_color")
+  if (effect == "chase color")
     ws2812fx.setMode(FX_MODE_CHASE_COLOR);
   if (effect == "chase random")
     ws2812fx.setMode(FX_MODE_CHASE_RANDOM);
