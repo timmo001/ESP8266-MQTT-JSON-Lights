@@ -24,12 +24,14 @@ int speed = 50;
 /******************************** OTHER GLOBALS *******************************/
 const char *on_cmd = "ON";
 const char *off_cmd = "OFF";
+const char *will_msg = "Offline";
+const char *online_msg = "Online";
 const char *effectString = "rainbow cycle";
-bool stateOn = true;
+bool stateOn = DEFAULT_POWER_ON_STATE;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_PIXEL_TYPE);
 
 unsigned long rgbToHex(int r, int g, int b) {
   return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
@@ -271,10 +273,13 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect(deviceName, MQTT_USER, MQTT_PASSWORD)) {
+    char combinedArray[sizeof(MQTT_STATE_TOPIC_PREFIX) + sizeof(deviceName) + 4];
+    sprintf(combinedArray, "%s%s/LWT", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
+    if (client.connect(deviceName, MQTT_USER, MQTT_PASSWORD, combinedArray, 0, 1, will_msg)) {
       Serial.println("connected");
 
-      char combinedArray[sizeof(MQTT_STATE_TOPIC_PREFIX) + sizeof(deviceName) + 4];
+      client.publish(combinedArray, online_msg, true); // Send last will message
+
       sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
       client.subscribe(combinedArray);
 
@@ -302,9 +307,13 @@ void setup() {
   ws2812fx.setBrightness(brightness);
   ws2812fx.setColor(rgbToHex(red, green, blue));
   ws2812fx.setSpeed(speed * 100);
-  ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
+  #ifdef DEFAULT_EFFECT
+  ws2812fx.setMode(DEFAULT_EFFECT);
+  #endif
+  #if DEFAULT_POWER_ON_STATE
   ws2812fx.start();
   stateOn = true;
+  #endif
 
   setup_wifi();
 
