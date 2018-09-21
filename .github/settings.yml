@@ -1,8 +1,8 @@
 ---
 repository:
-  description: "ESP8266 MAX7219 LED 8x8 Matrix MQTT Clock. Works with MQTT JSON and Home Assistant"
-  homepage: https://git.timmo.xyz/home-panel/
-  topics: mqtt, home-assistant, led, led-matrix-displays, esp8266, arduino, c-plus-plus, nodemcu, hassio, switch, light, clock, time, json
+  description: "ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Works with MQTT JSON and Home Assistant"
+  homepage: https://git.timmo.xyz/
+  topics: mqtt, home-assistant, WS2812, WS2811, WS2813, neopixel, fastled, led, lights, lighting
   private: false
   has_issues: true
   has_projects: false

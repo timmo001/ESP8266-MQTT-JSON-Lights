@@ -1,4 +1,4 @@
-# ESP8266-MQTT-JSON-Lights [![Build Status](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights.svg?branch=master)](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights)
+# ESP8266 MQTT JSON Lights [![Build Status](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights.svg?branch=master)](https://travis-ci.org/timmo001/ESP8266-MQTT-JSON-Lights)
 ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Based on https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Showcase Video
