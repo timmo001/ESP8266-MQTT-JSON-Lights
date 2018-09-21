@@ -2,7 +2,7 @@
 repository:
   description: "ESP8266 MQTT JSON Lights. Supports brightness, effects, speed and OTA uploads. Works with MQTT JSON and Home Assistant"
   homepage: https://git.timmo.xyz/
-  topics: mqtt, home-assistant, WS2812, WS2811, WS2813, neopixel, fastled, led, lights, lighting
+  topics: mqtt, home-assistant, WS2812, WS2811, WS2813, neopixel, fastled, led, lights, lighting, c-plus-plus, arduino, nodemcu
   private: false
   has_issues: true
   has_projects: false
