@@ -274,13 +274,13 @@ void reconnect() {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     char combinedArray[sizeof(MQTT_STATE_TOPIC_PREFIX) + sizeof(deviceName) + 4];
-    sprintf(combinedArray, "%s%s/LWT", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
-    if (client.connect(deviceName, MQTT_USER, MQTT_PASSWORD, combinedArray, 0, 1, will_msg)) {
+    sprintf(combinedArray, "%s%s/LWT", MQTT_STATE_TOPIC_PREFIX, deviceName);
+    if (client.connect(deviceName, MQTT_USER, MQTT_PASSWORD, combinedArray, 2, 1, will_msg)) {
       Serial.println("connected");
 
-      client.publish(combinedArray, online_msg, true); // Send last will message
+      client.publish(combinedArray, online_msg, 1); // Send last will message
 
-      sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
+      sprintf(combinedArray, "%s%s/set", MQTT_STATE_TOPIC_PREFIX, deviceName);
       client.subscribe(combinedArray);
 
       sendState();
@@ -307,13 +307,13 @@ void setup() {
   ws2812fx.setBrightness(brightness);
   ws2812fx.setColor(rgbToHex(red, green, blue));
   ws2812fx.setSpeed(speed * 100);
-  #ifdef DEFAULT_EFFECT
+#ifdef DEFAULT_EFFECT
   ws2812fx.setMode(DEFAULT_EFFECT);
-  #endif
-  #if DEFAULT_POWER_ON_STATE
+#endif
+#if DEFAULT_POWER_ON_STATE
   ws2812fx.start();
   stateOn = true;
-  #endif
+#endif
 
   setup_wifi();
 
