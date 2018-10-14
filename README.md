@@ -44,6 +44,9 @@ light:
   name: 'LED Lights'
   state_topic: 'light/led'
   command_topic: 'light/led/set'
+  availability_topic: 'light/led/LWT'
+  payload_available: 'Online'
+  payload_not_available: 'Offline'
   effect: true
   effect_list:
     - static
@@ -113,7 +116,7 @@ input_number:
     initial: 50 # This is the default speed
     mode: slider
     min: 10  # ######################################
-    max: 150 # Feel Free to adjust these as you like
+    max: 1000 # Feel Free to adjust these as you like
     step: 10 # ######################################
 
 automation:
