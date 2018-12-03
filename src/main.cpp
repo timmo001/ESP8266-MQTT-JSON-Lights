@@ -4,8 +4,8 @@ using namespace std;
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
 #include <PubSubClient.h>
+#include <Ticker.h>
 #include <WS2812FX.h>
 #include <WiFiUdp.h>
 
@@ -29,12 +29,48 @@ const char *online_msg = "Online";
 const char *effectString = "rainbow cycle";
 bool stateOn = DEFAULT_POWER_ON_STATE;
 
+float sound_digital;
+float sound_analog;
+int oldSpeed = 0;
+
+Ticker reactiveTimer;
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_PIXEL_TYPE);
 
 unsigned long rgbToHex(int r, int g, int b) {
   return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+}
+
+bool isPartOf(const std::string &word, const std::string &sentence) {
+  return sentence.find(word)   // this returns the index of the first instance
+         != std::string::npos; // which will take this value if it's not found
+}
+
+void updateState() {
+  sound_digital = digitalRead(SPEAKER_PIN);
+  // Serial.print("Sound Digital: ");
+  // Serial.println(sound_digital);
+  // if (!sound_digital || sound_digital != sound_digital)
+  //   return;
+  sound_analog = analogRead(SPEAKER_ANALOG_PIN);
+  Serial.print("Sound Analog: ");
+  Serial.println(sound_analog);
+  // if (!sound_analog || sound_analog != sound_analog)
+  //   return;
+
+  ws2812fx.setSpeed((sound_analog + 100) * 100);
+
+  // const size_t bufferSize = JSON_OBJECT_SIZE(4);
+  // DynamicJsonBuffer jsonBuffer(bufferSize);
+
+  // JsonObject &root = jsonBuffer.createObject();
+  // root["sound_digital"] = sound_digital;
+  // root["sound_analog"] = sound_analog;
+
+  // char payload[root.measureLength() + 1];
+  // root.printTo(payload, sizeof(payload));
 }
 
 void setEffect(String effect) {
@@ -64,6 +100,20 @@ void setEffect(String effect) {
     ws2812fx.setMode(FX_MODE_RAINBOW);
   if (effect == "rainbow cycle")
     ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
+  if (effect == "rainbow reactive") {
+    ws2812fx.setMode(FX_MODE_RAINBOW);
+    oldSpeed = ws2812fx.getSpeed();
+    Serial.println("Reactive effect set. Attach reactive timer..");
+    reactiveTimer.attach(2, updateState);
+    return;
+  }
+  if (effect == "rainbow cycle reactive") {
+    ws2812fx.setMode(FX_MODE_RAINBOW_CYCLE);
+    oldSpeed = ws2812fx.getSpeed();
+    Serial.println("Reactive effect set. Attach reactive timer..");
+    reactiveTimer.attach(2, updateState);
+    return;
+  }
   if (effect == "scan")
     ws2812fx.setMode(FX_MODE_SCAN);
   if (effect == "dual scan")
@@ -150,6 +200,9 @@ void setEffect(String effect) {
     ws2812fx.setMode(FX_MODE_TRICOLOR_CHASE);
   if (effect == "icu")
     ws2812fx.setMode(FX_MODE_ICU);
+
+  Serial.println("Detach reactive timer..");
+  reactiveTimer.detach();
 }
 
 void setup_wifi() {

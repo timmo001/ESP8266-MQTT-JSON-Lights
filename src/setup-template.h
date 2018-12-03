@@ -20,3 +20,7 @@ char *MQTT_STATE_TOPIC_PREFIX = "light/"; // e.g. led/<deviceName> and led/<devi
 #define DEFAULT_POWER_ON_STATE true
 
 char *deviceName = "led";
+char *hassName = "Light";
+
+#define SPEAKER_PIN D6
+#define SPEAKER_ANALOG_PIN A0
