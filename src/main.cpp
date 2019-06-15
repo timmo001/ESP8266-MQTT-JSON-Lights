@@ -20,6 +20,7 @@ byte blue = 255;
 byte brightness = 204;           // 80%
 String effect = "rainbow cycle"; // default effect ("static", "rainbow cycle" etc.)
 int speed = 50;
+int color_temp = 153;
 
 /******************************** OTHER GLOBALS *******************************/
 const char *on_cmd = "ON";
@@ -190,6 +191,7 @@ void sendState() {
   root["brightness"] = brightness;
   root["speed"] = speed;
   root["effect"] = effect.c_str();
+  root["color_temp"] = color_temp;
 
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
@@ -197,6 +199,43 @@ void sendState() {
   char combinedArray[sizeof(MQTT_STATE_TOPIC_PREFIX) + sizeof(deviceName)];
   sprintf(combinedArray, "%s%s", MQTT_STATE_TOPIC_PREFIX, deviceName); // with word space
   client.publish(combinedArray, buffer, true);
+}
+
+// see: http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+void computeBlueFromColorTemp(double temperature) {
+  double temp;
+  if (temperature >= 66) {
+    temp = 255;
+  } else if (temperature < 19) {
+    temp = 0;
+  } else {
+    temp = temperature - 10;
+    temp = 138.5177312231 * log(temp) - 305.0447927307;
+  }
+  blue = constrain(temp, 0, 255);
+}
+
+void computeGreenFromColorTemp(double temperature) {
+  double temp;
+  if (temperature < 66) {
+    temp = temperature;
+    temp = 99.4708025861 * log(temp) - 161.1195681661;
+  } else {
+    temp = temperature - 60;
+    temp = 288.1221695283 * pow(temp, -0.0755148492);
+  }
+  green = constrain(temp, 0, 255);
+}
+
+void computeRedFromColorTemp(double temperature) {
+  double temp;
+  if (temperature < 66) {
+    temp = 255;
+  } else {
+    temp = temperature - 60;
+    temp = 329.698727446 * pow(temp, -0.1332047592);
+  }
+  red = constrain(temp, 0, 255);
 }
 
 bool processJson(char *message) {
@@ -246,6 +285,14 @@ bool processJson(char *message) {
     ws2812fx.setSpeed(speed * 100);
   }
 
+  if (root.containsKey("color_temp")) {
+    color_temp = root["color_temp"];
+    double temperature = 10000 / (double)color_temp;
+    computeRedFromColorTemp(temperature);
+    computeGreenFromColorTemp(temperature);
+    computeBlueFromColorTemp(temperature);
+    ws2812fx.setColor(rgbToHex(red, green, blue));
+  }
   return true;
 }
 
