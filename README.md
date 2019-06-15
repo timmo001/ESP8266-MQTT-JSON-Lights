@@ -107,6 +107,7 @@ light:
     - icu
   brightness: true
   rgb: true
+  color_temp: true
   optimistic: false
   qos: 0
 
